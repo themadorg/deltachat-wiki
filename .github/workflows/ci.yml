@@ -39,7 +39,7 @@ jobs:
         run: bun --bun run build
 
       - name: Build Webxdc
-        run: bun run build:xdc
+        run: bun --bun run build:xdc
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

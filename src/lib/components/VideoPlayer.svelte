@@ -7,7 +7,7 @@
     let { src, poster, type = "video/mp4" } = $props();
 
     const i18n = getI18n();
-    let videoElement: HTMLVideoElement;
+    let videoElement: HTMLVideoElement = $state() as HTMLVideoElement;
     let player: any;
     let copied = $state(false);
 

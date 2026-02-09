@@ -2,27 +2,9 @@
     import { getI18n } from "$lib/i18n.svelte";
     import { config } from "../../config";
     import Logo from "./Logo.svelte";
-    import {
-        Github,
-        Youtube,
-        MessageSquare,
-        Globe,
-        Heart,
-        Download,
-        ExternalLink,
-        Users,
-    } from "@lucide/svelte";
+    import { Github, ExternalLink } from "@lucide/svelte";
 
     const i18n = getI18n();
-
-    const socialIcons: Record<string, any> = {
-        github: Github,
-        youtube: Youtube,
-        forum: MessageSquare,
-        mastodon: Users,
-        reddit: MessageSquare,
-        irc: MessageSquare,
-    };
 </script>
 
 <footer class="footer">
@@ -37,18 +19,17 @@
                     {i18n.t("hero_subtitle")}
                 </p>
                 <div class="social-links">
-                    {#each Object.entries(config.socials) as [key, url]}
-                        {@const Icon = socialIcons[key] || Globe}
+                    {#if config.socials.github}
                         <a
-                            href={url}
+                            href={config.socials.github}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="social-link"
-                            title={key}
+                            title="GitHub"
                         >
-                            <Icon size={20} />
+                            <Github size={20} />
                         </a>
-                    {/each}
+                    {/if}
                 </div>
             </div>
 
@@ -85,17 +66,22 @@
         </div>
 
         <div class="footer-bottom">
-            <div class="copyright">
-                © {new Date().getFullYear()}
-                {i18n.t("brand_name")}.
-                <a
-                    href={config.wiki.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="wiki-link"
-                >
-                    GitHub
-                </a>
+            <div class="footer-info">
+                <div class="copyright">
+                    © {new Date().getFullYear()}
+                    {i18n.t("brand_name")}.
+                    <a
+                        href={config.wiki.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="wiki-link"
+                    >
+                        GitHub
+                    </a>
+                </div>
+                <div class="license">
+                    {i18n.t("footer_license")}
+                </div>
             </div>
         </div>
     </div>
@@ -211,9 +197,14 @@
     .footer-bottom {
         border-top: 1px solid var(--border);
         padding-top: 2rem;
+    }
+
+    .footer-info {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        gap: 0.75rem;
+        text-align: center;
     }
 
     .copyright {
@@ -222,6 +213,12 @@
         display: flex;
         gap: 0.5rem;
         align-items: center;
+    }
+
+    .license {
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+        opacity: 0.7;
     }
 
     .wiki-link {

@@ -81,6 +81,7 @@
     "footer_link_youtube": "YouTube",
     "footer_link_donate": "Donate",
     "footer_link_download": "Download App",
+    "footer_license": "Licensed under GNU GPLv3 (Copyleft). Free to use and share.",
     "external_link_title": "External Link",
     "external_link_desc": "This link points outside this app. Webxdc cannot open external URLs. Please copy the address and open it manually in your browser.",
     "external_link_copy": "Copy URL",

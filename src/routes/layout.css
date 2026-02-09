@@ -1,0 +1,97 @@
+/* Shabnam font — served locally for webxdc CSP compatibility */
+@font-face {
+  font-family: 'Shabnam';
+  src: url('/fonts/shabnam/Shabnam.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Shabnam';
+  src: url('/fonts/shabnam/Shabnam-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Shabnam';
+  src: url('/fonts/shabnam/Shabnam-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Shabnam';
+  src: url('/fonts/shabnam/Shabnam-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+:root {
+  --bg: #0b101b;
+  --bg-surface: rgba(11, 16, 27, 0.8);
+  --bg-sidebar: #0b101b;
+  --border: rgba(255, 255, 255, 0.05);
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --primary: #43d380; /* Refined Anaconda Green */
+  --primary-rgb: 67, 211, 128;
+  --primary-fg: #0b101b;
+  --primary-glow: rgba(67, 211, 128, 0.1);
+  --accent: #13d3ba;
+  --scrollbar-bg: #020617;
+  --scrollbar-thumb: #1e293b;
+  --scrollbar-hover: #334155;
+  --font-sans: 'Shabnam', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-sidebar: #f8fafc;
+  --border: rgba(0, 0, 0, 0.08);
+  --text: #0b101b;
+  --text-muted: #64748b;
+  --primary: #008a56;
+  --primary-rgb: 0, 138, 86;
+  --primary-fg: #ffffff;
+  --primary-glow: rgba(0, 138, 86, 0.05);
+  --scrollbar-bg: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-hover: #94a3b8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  scroll-margin-top: 120px; /* Adjust based on header height + buffer */
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}

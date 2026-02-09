@@ -1,0 +1,22 @@
+<script lang="ts">
+    let { children } = $props();
+</script>
+
+<div class="download-grid">
+    {@render children?.()}
+</div>
+
+<style>
+    .download-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    @media (max-width: 640px) {
+        .download-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

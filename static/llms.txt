@@ -1,0 +1,48 @@
+# Delta Chat Documentation
+
+> Delta Chat is the most decentralized messenger — it works over email. No phone number needed, fully encrypted by default, and works with anyone's email address.
+
+This is the official documentation for Delta Chat, covering usage guides, server administration, bot development, and Webxdc app development.
+
+## Documentation Sections
+
+### General
+- [Introduction](https://deltachat.wiki/en/docs/general/introduction): What is Delta Chat and how it works
+- [Features](https://deltachat.wiki/en/docs/general/features): Key features and capabilities
+- [Installation](https://deltachat.wiki/en/docs/general/installation): How to install Delta Chat on all platforms
+- [Why Delta Chat](https://deltachat.wiki/en/docs/general/why-deltachat): Reasons to use Delta Chat
+- [Privacy & Security](https://deltachat.wiki/en/docs/general/privacy): Privacy and security information
+
+### Bot Development
+- [Overview](https://deltachat.wiki/en/docs/bot/overview): Introduction to Delta Chat bots
+- [Quick Start](https://deltachat.wiki/en/docs/bot/quickstart): Build your first bot
+- [How to Run a Bot](https://deltachat.wiki/en/docs/bot/howto): Detailed bot hosting guide
+- [Development Info](https://deltachat.wiki/en/docs/bot/development): Developer information
+- [Events Reference](https://deltachat.wiki/en/docs/bot/events): Event hook reference
+
+### Webxdc Apps
+- [Overview](https://deltachat.wiki/en/docs/webxdc/overview): What are Webxdc apps
+- [Specification](https://deltachat.wiki/en/docs/webxdc/specification/overview): Webxdc API specification
+- [Getting Started](https://deltachat.wiki/en/docs/webxdc/getting-started/overview): Start building Webxdc apps
+- [FAQ](https://deltachat.wiki/en/docs/webxdc/faq/packaging): Frequently asked questions
+
+### Server Administration
+- [Chatmail Overview](https://deltachat.wiki/en/docs/servers/chatmail/overview): Chatmail server overview
+- [Chatmail Getting Started](https://deltachat.wiki/en/docs/servers/chatmail/getting-started): Setting up Chatmail
+- [Madmail Overview](https://deltachat.wiki/en/docs/servers/madmail/overview): Madmail server overview
+- [Madmail Getting Started](https://deltachat.wiki/en/docs/servers/madmail/getting-started): Setting up Madmail
+- [Madmail Technical Docs](https://deltachat.wiki/en/docs/servers/madmail/technical/overview): Technical documentation
+
+## Languages
+
+This documentation is available in:
+- English: https://deltachat.wiki/en/
+- فارسی (Persian): https://deltachat.wiki/fa/
+
+## About Delta Chat
+
+Delta Chat is a decentralized and open messaging app that runs on top of email. It looks and feels like other popular messenger apps but uses the existing email infrastructure. All messages are encrypted with Autocrypt and optionally with OpenPGP. No central servers, no phone number required.
+
+- Website: https://delta.chat
+- Source Code: https://github.com/deltachat
+- Support: https://support.delta.chat

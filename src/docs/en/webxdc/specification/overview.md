@@ -1,0 +1,19 @@
+---
+title: Webxdc Specification
+description: Technical details of the webxdc protocol and container format.
+category: webxdc
+order: 3
+---
+
+# Webxdc Specification
+
+The webxdc specification covers three areas: 
+
+- [`.xdc` container file format](format.md) describes zip-file format
+  with manifest and icon files. 
+
+- [Javascript API](api.md) specifies a minimal stable API that all webxdc
+  apps can use. 
+
+- [Messenger implementation](messenger.md) specifies how messenger 
+  run webxdc apps in isolated web views. 

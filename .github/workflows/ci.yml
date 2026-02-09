@@ -13,6 +13,7 @@ permissions:
   packages: write
   id-token: write
   checks: write
+  deployments: write
 
 jobs:
   lint-and-build:
@@ -29,10 +30,10 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Sync SvelteKit
-        run: bun run prepare
+        run: bun --bun run prepare
 
       - name: Type check
-        run: bun run check
+        run: bun --bun run check
 
       - name: Build site
         run: bun --bun run build
@@ -41,7 +42,6 @@ jobs:
         run: bun run build:xdc
 
       - name: Upload build artifacts
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -88,8 +88,61 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
 
-  build-summary:
+  deploy:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
     needs: [lint-and-build, semantic-release]
+    if: always() && needs.lint-and-build.result == 'success' && (needs.semantic-release.result == 'success' || needs.semantic-release.result == 'skipped')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build --project-name deltachat-wiki --branch ${{ github.head_ref || github.ref_name }}
+
+      - name: Comment preview URL on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.deploy.outputs.deployment-url }}';
+            const body = `🚀 **Preview deployed!**\n\n🔗 ${url}`;
+            
+            // Find existing bot comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes('Preview deployed!'));
+            
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+  build-summary:
+    needs: [lint-and-build, semantic-release, deploy]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -108,6 +161,7 @@ jobs:
           echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| Lint & Build | ${{ needs.lint-and-build.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Semantic Release | ${{ needs.semantic-release.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Deploy | ${{ needs.deploy.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
           echo "- [Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

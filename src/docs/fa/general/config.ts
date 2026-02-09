@@ -4,4 +4,5 @@ export const sidebarConfig = [
     { title: "ویژگی‌ها", slug: "general/features" },
     { title: "حریم خصوصی و امنیت", slug: "general/privacy" },
     { title: "چرا دلتاچت", slug: "general/why-deltachat" },
+    { title: "مشارکت", slug: "general/contributing" },
 ];

@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/themadorg/deltachat-wiki/compare/v1.0.0...v1.1.0) (2026-02-09)
+
+
+### Features
+
+* inject version into webxdc manifest name ([662cd7e](https://github.com/themadorg/deltachat-wiki/commit/662cd7ed7a170a2ce88414eef8927d4b282d7397))
+
 # 1.0.0 (2026-02-09)
 
 

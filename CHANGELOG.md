@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/themadorg/deltachat-wiki/compare/v1.1.0...v1.2.0) (2026-02-09)
+
+
+### Features
+
+* add zen mode for distraction-free documentation reading ([fa92507](https://github.com/themadorg/deltachat-wiki/commit/fa9250773cba7aa5e48c2d201f8d750b90c46000))
+
 # [1.1.0](https://github.com/themadorg/deltachat-wiki/compare/v1.0.0...v1.1.0) (2026-02-09)
 
 

@@ -1,0 +1,56 @@
+{
+    "branches": [
+        "main"
+    ],
+    "tagFormat": "v${version}",
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md"
+            }
+        ],
+        [
+            "@semantic-release/npm",
+            {
+                "npmPublish": false
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "echo ${nextRelease.version} > .version"
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "path": "dist/deltachat-wiki.xdc",
+                        "name": "deltachat-wiki-v${nextRelease.version}.xdc",
+                        "label": "Delta Chat Wiki (Webxdc)"
+                    },
+                    {
+                        "path": "dist/deltachat-wiki-site.tar.gz",
+                        "name": "deltachat-wiki-v${nextRelease.version}-site.tar.gz",
+                        "label": "Static Site Build"
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "package.json",
+                    "CHANGELOG.md",
+                    ".version"
+                ],
+                "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }
+        ]
+    ]
+}

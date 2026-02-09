@@ -14,6 +14,7 @@ This project is licensed under **GPLv3 (Copyleft)** — everyone is free to use,
 - [Translation Guidelines](#translation-guidelines)
 - [Adding a New Language](#adding-a-new-language)
 - [Development Setup](#development-setup)
+- [CI/CD & Versioning](#cicd--versioning)
 - [Submitting a Pull Request](#submitting-a-pull-request)
 - [Code of Conduct](#code-of-conduct)
 
@@ -195,6 +196,44 @@ bun run build
 # Webxdc build (produces dist/deltachat-how.xdc)
 bun run build:xdc
 ```
+
+## CI/CD & Versioning
+
+This project uses an automated CI/CD pipeline with **semantic versioning**.
+
+### How It Works
+
+- Every push to `main` and `dev`, and every PR targeting `main`, triggers the **CI Pipeline** (`.github/workflows/ci.yml`).
+- The pipeline runs **type checking**, **builds the site**, and **builds the Webxdc (.xdc) package**.
+- On pushes to `main`, if the commits contain version-bumping changes, **semantic-release** automatically:
+  1. Determines the next version number from your commit messages
+  2. Generates a `CHANGELOG.md`
+  3. Creates a **GitHub Release** with the `.xdc` file and static site tarball as downloadable assets
+  4. Tags the release (e.g., `v1.2.0`) and commits the version bump back to `main`
+
+### Commit Message Convention
+
+We use [Conventional Commits](https://www.conventionalcommits.org/). Your commit messages **directly control versioning**:
+
+| Prefix | Version Bump | Example |
+|--------|-------------|---------|
+| `fix:` | Patch (`0.0.x`) | `fix: correct typo in encryption guide` |
+| `feat:` | Minor (`0.x.0`) | `feat: add German language support` |
+| `feat!:` or `BREAKING CHANGE:` | Major (`x.0.0`) | `feat!: redesign navigation structure` |
+| `docs:` | No release | `docs: update contributing guide` |
+| `chore:` | No release | `chore: update dependencies` |
+| `i18n:` | No release* | `i18n: add Russian translation for bot section` |
+
+> \* Commits with `docs:`, `chore:`, `i18n:`, and similar prefixes do **not** trigger a release by default. Use `fix:` or `feat:` when your change meaningfully affects the published site.
+
+### Release Assets
+
+Each GitHub Release includes:
+
+- **`deltachat-wiki-v{version}.xdc`** — The Webxdc file (offline documentation for Delta Chat)
+- **`deltachat-wiki-v{version}-site.tar.gz`** — The full static site build
+
+For more details, see [`docs/ci-versioning.md`](../docs/ci-versioning.md).
 
 ## Submitting a Pull Request
 

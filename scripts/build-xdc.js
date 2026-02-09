@@ -88,6 +88,28 @@ for (const f of ['manifest.toml', 'icon.png']) {
     }
 }
 
+// Inject version into manifest.toml
+const manifestPath = join(XDC_STAGE, 'manifest.toml');
+if (existsSync(manifestPath)) {
+    let version = '0.0.0';
+    // Prefer .version file (written by semantic-release in CI)
+    const versionFile = join(ROOT, '.version');
+    if (existsSync(versionFile)) {
+        version = readFileSync(versionFile, 'utf-8').trim();
+    } else {
+        // Fall back to package.json version
+        const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8'));
+        version = pkg.version || '0.0.0';
+    }
+    let manifest = readFileSync(manifestPath, 'utf-8');
+    manifest = manifest.replace(
+        /^name\s*=\s*"(.+?)"/m,
+        `name = "$1 v${version}"`
+    );
+    writeFileSync(manifestPath, manifest);
+    console.log(`   📌 Version injected: v${version}`);
+}
+
 // ===== FIX 1: Replace root index.html =====
 // The original does a meta refresh to /fa which is an absolute path.
 // In webxdc, we need to redirect to the flat file: en.html or fa.html

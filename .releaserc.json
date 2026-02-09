@@ -21,7 +21,7 @@
         [
             "@semantic-release/exec",
             {
-                "prepareCmd": "echo ${nextRelease.version} > .version"
+                "prepareCmd": "echo ${nextRelease.version} > .version && node scripts/build-xdc.js"
             }
         ],
         [

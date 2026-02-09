@@ -198,7 +198,7 @@
                     <button
                         class="action-btn"
                         onclick={() => (showLangModal = true)}
-                        title="Change Language"
+                        title={i18n.t("select_language")}
                     >
                         <Languages size={20} />
                     </button>

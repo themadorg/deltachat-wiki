@@ -44,9 +44,7 @@
                     <button
                         class="action-btn"
                         onclick={() => (showLangModal = true)}
-                        title={i18n.lang === "fa"
-                            ? "انتخاب زبان"
-                            : "Select Language"}
+                        title={i18n.t("select_language")}
                     >
                         <Languages size={20} />
                     </button>

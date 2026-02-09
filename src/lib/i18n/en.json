@@ -1,4 +1,5 @@
 {
+    "select_language": "Select Language",
     "site_title": "deltachat.wiki - Learning to use the most decentralized messenger",
     "brand_name": "deltachat.wiki",
     "brand_logo_text": "deltachat.wiki",
@@ -75,5 +76,9 @@
     "external_link_desc": "This link points outside this app. Webxdc cannot open external URLs. Please copy the address and open it manually in your browser.",
     "external_link_copy": "Copy URL",
     "video_unavailable_title": "Video Not Available",
-    "video_unavailable_desc": "This video is hosted externally and cannot be played inside Webxdc. You can watch it in your browser at:"
+    "video_unavailable_desc": "This video is hosted externally and cannot be played inside Webxdc. You can watch it in your browser at:",
+    "error_not_found": "Page Not Found",
+    "error_occurred": "An error occurred",
+    "error_back_to_docs": "Back to Docs",
+    "error_home": "Home"
 }

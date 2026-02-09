@@ -1,8 +1,10 @@
 import type { RequestHandler } from './$types';
 import { fetchDocs } from '$lib/docs';
 
+import { supportedLangCodes } from '$lib/i18n.svelte';
+
 const SITE_URL = 'https://deltachat.wiki';
-const LANGS = ['en', 'fa'];
+const LANGS = supportedLangCodes as unknown as string[];
 
 export const prerender = true;
 

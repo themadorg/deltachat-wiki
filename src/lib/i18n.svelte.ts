@@ -1,16 +1,13 @@
 import { goto } from '$app/navigation';
 import { setContext, getContext } from 'svelte';
+import { supportedLanguages, supportedLangCodes } from './languages';
+export { supportedLanguages, supportedLangCodes };
 import en from './i18n/en.json';
 import fa from './i18n/fa.json';
+import ru from './i18n/ru.json';
 
-const translationMap: Record<string, any> = { en, fa };
+const translationMap: Record<string, any> = { en, fa, ru };
 
-export const supportedLanguages = [
-    { code: 'en', name: 'English', dir: 'ltr' },
-    { code: 'fa', name: 'فارسی', dir: 'rtl' }
-] as const;
-
-export const supportedLangCodes = supportedLanguages.map(l => l.code);
 type SupportedLangCode = (typeof supportedLangCodes)[number];
 
 export class I18n {
@@ -45,7 +42,7 @@ export class I18n {
         const pathParts = pathname.split('/');
 
         // Replace the lang segment in the URL
-        if (['en', 'fa'].includes(pathParts[1])) {
+        if (supportedLangCodes.includes(pathParts[1] as any)) {
             pathParts[1] = newLang;
         } else {
             pathParts.splice(1, 0, newLang);

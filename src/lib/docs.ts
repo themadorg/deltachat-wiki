@@ -1,3 +1,5 @@
+import { supportedLangCodes } from './i18n.svelte';
+
 export async function fetchDocs(lang: string = 'fa') {
     const allDocFiles = import.meta.glob('/src/docs/**/*.md');
     const iterableDocFiles = Object.entries(allDocFiles);
@@ -60,7 +62,7 @@ export async function getDoc(path: string, lang: string) {
 
     // Normalize path
     const normalizedPath = path.replace(/^\/+|\/+$/g, '').toLowerCase();
-    const langs = Array.from(new Set([lang, 'en', 'fa'])).filter(Boolean);
+    const langs = Array.from(new Set([lang, 'en', ...supportedLangCodes])).filter(Boolean);
 
     for (const l of langs) {
         for (const [key, resolver] of Object.entries(allDocs)) {
@@ -95,7 +97,7 @@ export async function getRawDoc(path: string, lang: string) {
 
     // Normalize path
     const normalizedPath = path.replace(/^\/+|\/+$/g, '').toLowerCase();
-    const langs = Array.from(new Set([lang, 'en', 'fa'])).filter(Boolean);
+    const langs = Array.from(new Set([lang, 'en', ...supportedLangCodes])).filter(Boolean);
 
     for (const l of langs) {
         for (const [key, resolver] of Object.entries(allDocsRaw)) {

@@ -17,11 +17,9 @@
         <h1 class="error-code">{status}</h1>
         <h2 class="error-title">
             {#if status === 404}
-                {i18n.lang === "fa"
-                    ? "صفحه مورد نظر پیدا نشد"
-                    : "Page Not Found"}
+                {i18n.t("error_not_found")}
             {:else}
-                {i18n.lang === "fa" ? "خطایی رخ داده است" : "An error occurred"}
+                {i18n.t("error_occurred")}
             {/if}
         </h2>
 
@@ -33,11 +31,11 @@
                 class="btn btn-primary"
             >
                 <ArrowLeft size={18} />
-                {i18n.lang === "fa" ? "بازگشت به مستندات" : "Back to Docs"}
+                {i18n.t("error_back_to_docs")}
             </a>
             <a href="/{i18n.lang}" class="btn btn-outline">
                 <Home size={18} />
-                {i18n.lang === "fa" ? "صفحه اصلی" : "Home"}
+                {i18n.t("error_home")}
             </a>
         </div>
     </div>

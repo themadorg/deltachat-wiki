@@ -1,12 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
+    import { supportedLangCodes } from "$lib/i18n.svelte";
 
     onMount(() => {
         // Detect user's preferred language from the browser
         const browserLang = navigator.language?.split("-")[0];
-        const supportedLangs = ["en", "fa"];
-        const lang = supportedLangs.includes(browserLang) ? browserLang : "fa";
+        const lang = (supportedLangCodes as unknown as string[]).includes(
+            browserLang,
+        )
+            ? browserLang
+            : "fa";
         goto(`/${lang}`, { replaceState: true });
     });
 </script>

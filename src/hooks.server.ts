@@ -2,11 +2,11 @@ import { type Handle, redirect } from '@sveltejs/kit';
 import fs from 'fs';
 import path from 'path';
 import * as mimetypes from 'mime-types';
-
-const supportedLangs = ['en', 'fa'];
+import { supportedLangCodes, supportedLanguages } from '$lib/i18n.svelte';
 
 export const handle: Handle = async ({ event, resolve }) => {
     const { pathname } = event.url;
+    const supportedLangs = supportedLangCodes as unknown as string[];
 
     // Check if the URL already starts with a supported language
     const langMatch = pathname.match(/^\/([a-z]{2})(\/|$)/);
@@ -16,7 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     // Get language from URL, cookie, header, or default to 'fa'
     const lang = urlLang || event.cookies.get('lang') || event.request.headers.get('accept-language')?.split(',')[0].split('-')[0] || 'fa';
     const finalLang = supportedLangs.includes(lang) ? lang : 'fa';
-    const finalDir = finalLang === 'fa' ? 'rtl' : 'ltr';
+    const finalDir = supportedLanguages.find(l => l.code === finalLang)?.dir || 'ltr';
 
     // Skip redirects for static files, API routes, and special paths
     if (!hasLang && !pathname.startsWith('/debug') && !pathname.startsWith('/_') && !pathname.includes('.') && pathname !== '/') {

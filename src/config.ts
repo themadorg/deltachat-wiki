@@ -1,8 +1,8 @@
 export const config = {
     brand: {
         name: "deltachat.wiki",
-        tagline: "Learning to use the most decentralized messenger",
-        description: "An independent guide to Delta Chat.",
+        tagline: "An unofficial guide to Delta Chat, a secure and open source decentralized messaging platform.",
+        description: "An unofficial guide to Delta Chat, a secure and open source decentralized messaging platform.",
         logoText: "deltachat.wiki"
     },
     socials: {

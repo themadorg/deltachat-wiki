@@ -58,13 +58,6 @@
     <main class="main-content">
         {@render children()}
     </main>
-
-    <footer class="footer">
-        <p>
-            © {new Date().getFullYear()}
-            {i18n.t("brand_name")}. Independent Wiki.
-        </p>
-    </footer>
 </div>
 
 <style>
@@ -222,13 +215,5 @@
 
     .main-content {
         flex: 1;
-    }
-
-    .footer {
-        padding: 4rem 2rem;
-        text-align: center;
-        border-top: 1px solid var(--border);
-        color: var(--text-muted);
-        font-size: 0.875rem;
     }
 </style>

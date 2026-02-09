@@ -1,168 +1,143 @@
 <script lang="ts">
     import { getI18n } from "$lib/i18n.svelte";
-    import {
-        Github,
-        Twitter,
-        MessageCircle,
-        Mail,
-        ExternalLink,
-    } from "@lucide/svelte";
-
     import { config } from "../../config";
     import Logo from "./Logo.svelte";
+    import {
+        Github,
+        Youtube,
+        MessageSquare,
+        Globe,
+        Heart,
+        Download,
+        ExternalLink,
+        Users,
+    } from "@lucide/svelte";
 
     const i18n = getI18n();
-    const currentYear = new Date().getFullYear();
 
-    interface FooterLink {
-        label: string;
-        href: string;
-        external: boolean;
-    }
-
-    interface FooterSection {
-        title: string;
-        links: FooterLink[];
-    }
-
-    const footerSections = $derived<FooterSection[]>(
-        config.footer.sections.map((section) => ({
-            title: section.titleKey
-                ? i18n.t(section.titleKey)
-                : (section as any).title,
-            links: section.links.map((link) => ({
-                label: (link as any).labelKey
-                    ? i18n.t((link as any).labelKey)
-                    : (link as any).label,
-                href: (link as any).href,
-                external: !!(link as any).external,
-            })),
-        })),
-    );
+    const socialIcons: Record<string, any> = {
+        github: Github,
+        youtube: Youtube,
+        forum: MessageSquare,
+        mastodon: Users,
+        reddit: MessageSquare,
+        irc: MessageSquare,
+    };
 </script>
 
-<footer class="main-footer">
+<footer class="footer">
     <div class="footer-container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div class="brand-logo">
-                    <Logo size={38} class="footer-logo-img" />
+        <div class="footer-main">
+            <div class="brand-section">
+                <a href="/{i18n.lang}" class="footer-logo">
+                    <Logo size={28} />
                     <span class="logo-text">{i18n.t("brand_logo_text")}</span>
-                </div>
-                <p class="brand-description">
-                    {config.brand.description}
+                </a>
+                <p class="brand-tagline">
+                    {i18n.t("hero_subtitle")}
                 </p>
-
                 <div class="social-links">
-                    <a href={config.socials.github} aria-label="Github">
-                        <Github size={20} />
-                    </a>
-                    <a href={config.socials.twitter} aria-label="Twitter">
-                        <Twitter size={20} />
-                    </a>
-                    <a href={config.socials.forum} aria-label="Community">
-                        <MessageCircle size={20} />
-                    </a>
-                    <a href="mailto:{config.socials.email}" aria-label="Email">
-                        <Mail size={20} />
-                    </a>
+                    {#each Object.entries(config.socials) as [key, url]}
+                        {@const Icon = socialIcons[key] || Globe}
+                        <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="social-link"
+                            title={key}
+                        >
+                            <Icon size={20} />
+                        </a>
+                    {/each}
                 </div>
             </div>
 
-            {#each footerSections as section}
-                <div class="footer-column">
-                    <h4 class="column-title">{section.title}</h4>
-                    <ul class="column-links">
-                        {#each section.links as link}
-                            <li>
-                                <a
-                                    href={link.href}
-                                    target={link.external ? "_blank" : "_self"}
-                                    rel={link.external
-                                        ? "noopener noreferrer"
-                                        : ""}
-                                >
-                                    {link.label}
-                                    {#if link.external}
-                                        <ExternalLink
-                                            size={12}
-                                            class="external-icon"
-                                        />
-                                    {/if}
-                                </a>
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-            {/each}
+            <nav class="footer-nav">
+                {#each config.footer.sections as section}
+                    <div class="footer-section">
+                        <h4>{i18n.t(section.titleKey)}</h4>
+                        <ul>
+                            {#each section.links as link}
+                                <li>
+                                    <a
+                                        href={link.href}
+                                        target={link.external
+                                            ? "_blank"
+                                            : undefined}
+                                        rel={link.external
+                                            ? "noopener noreferrer"
+                                            : undefined}
+                                    >
+                                        {i18n.t(link.labelKey)}
+                                        {#if link.external}
+                                            <ExternalLink
+                                                size={12}
+                                                class="ext-icon"
+                                            />
+                                        {/if}
+                                    </a>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                {/each}
+            </nav>
         </div>
 
         <div class="footer-bottom">
             <div class="copyright">
-                © {currentYear}
-                {i18n.t("brand_name")}. Independent Wiki.
-            </div>
-            <div class="bottom-links">
-                {#each config.footer.bottomLinks as link}
-                    <a href={link.href}>{link.label}</a>
-                {/each}
+                © {new Date().getFullYear()}
+                {i18n.t("brand_name")}.
+                <a
+                    href={config.wiki.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="wiki-link"
+                >
+                    GitHub
+                </a>
             </div>
         </div>
     </div>
 </footer>
 
 <style>
-    .main-footer {
-        background: var(--bg-sidebar);
+    .footer {
+        background: var(--bg-surface);
         border-top: 1px solid var(--border);
-        padding: 4rem 2rem 2rem;
-        margin-top: 4rem;
-        color: var(--text);
+        padding: 5rem 2rem 3rem;
+        margin-top: auto;
     }
 
     .footer-container {
-        max-width: 1400px;
+        max-width: 1200px;
         margin: 0 auto;
     }
 
-    .footer-grid {
+    .footer-main {
         display: grid;
-        grid-template-columns: 1.5fr repeat(3, 1fr);
+        grid-template-columns: 1.5fr 3fr;
         gap: 4rem;
         margin-bottom: 4rem;
     }
 
-    .footer-brand {
+    .brand-section {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
     }
 
-    .brand-logo {
+    .footer-logo {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary);
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 800;
+        font-size: 1.25rem;
     }
 
-    :global(.footer-logo-img) {
-        width: 38px;
-        height: 38px;
-        color: var(--primary);
-    }
-
-    .disclaimer-text {
-        font-size: 0.8125rem;
-        color: var(--text-muted);
-        line-height: 1.5;
-        max-width: 320px;
-        font-style: italic;
-        opacity: 0.8;
-    }
-
-    .brand-description {
+    .brand-tagline {
         color: var(--text-muted);
         font-size: 0.9375rem;
         line-height: 1.6;
@@ -171,29 +146,43 @@
 
     .social-links {
         display: flex;
-        gap: 1.25rem;
+        gap: 1rem;
     }
 
-    .social-links a {
+    .social-link {
         color: var(--text-muted);
-        transition: color 0.2s;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: rgba(120, 120, 120, 0.05);
     }
 
-    .social-links a:hover {
+    .social-link:hover {
         color: var(--primary);
+        background: rgba(var(--primary-rgb), 0.1);
+        transform: translateY(-2px);
     }
 
-    .column-title {
+    .footer-nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .footer-section h4 {
         font-size: 0.875rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 1.5rem;
         color: var(--text);
-        opacity: 0.9;
     }
 
-    .column-links {
+    .footer-section ul {
         list-style: none;
         padding: 0;
         display: flex;
@@ -201,22 +190,21 @@
         gap: 0.75rem;
     }
 
-    .column-links a {
-        color: var(--text-muted);
+    .footer-section a {
         text-decoration: none;
-        font-size: 1rem;
-        transition: all 0.2s;
+        color: var(--text-muted);
+        font-size: 0.9375rem;
+        transition: color 0.2s;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
-    .column-links a:hover {
-        color: var(--primary);
-        transform: translateX(4px);
+    .footer-section a:hover {
+        color: var(--text);
     }
 
-    :global(.external-icon) {
+    :global(.ext-icon) {
         opacity: 0.5;
     }
 
@@ -224,49 +212,42 @@
         border-top: 1px solid var(--border);
         padding-top: 2rem;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
+    }
+
+    .copyright {
         color: var(--text-muted);
         font-size: 0.875rem;
-    }
-
-    .bottom-links {
         display: flex;
-        gap: 2rem;
+        gap: 0.5rem;
+        align-items: center;
     }
 
-    .bottom-links a {
-        color: var(--text-muted);
+    .wiki-link {
+        color: var(--primary);
         text-decoration: none;
-        transition: color 0.2s;
+        font-weight: 600;
     }
 
-    .bottom-links a:hover {
-        color: var(--text);
+    .wiki-link:hover {
+        text-decoration: underline;
     }
 
-    @media (max-width: 1024px) {
-        .footer-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .footer-grid {
+    @media (max-width: 900px) {
+        .footer-main {
             grid-template-columns: 1fr;
-            gap: 2.5rem;
+            gap: 4rem;
         }
 
-        .footer-bottom {
-            flex-direction: column;
-            gap: 1.5rem;
-            text-align: center;
+        .footer-nav {
+            grid-template-columns: repeat(2, 1fr);
         }
+    }
 
-        .bottom-links {
-            flex-direction: column;
-            gap: 1rem;
+    @media (max-width: 600px) {
+        .footer-nav {
+            grid-template-columns: 1fr;
         }
     }
 </style>

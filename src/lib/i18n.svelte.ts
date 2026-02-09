@@ -5,8 +5,9 @@ export { supportedLanguages, supportedLangCodes };
 import en from './i18n/en.json';
 import fa from './i18n/fa.json';
 import ru from './i18n/ru.json';
+import es from './i18n/es.json';
 
-const translationMap: Record<string, any> = { en, fa, ru };
+const translationMap: Record<string, any> = { en, fa, ru, es };
 
 type SupportedLangCode = (typeof supportedLangCodes)[number];
 

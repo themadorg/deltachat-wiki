@@ -120,6 +120,20 @@
 		</div>
 	{/if}
 
+	{#if !isMarkdownMode && data.slug}
+		<a
+			href="https://github.com/themadorg/deltachat-wiki/edit/main/src/docs/{i18n.lang}/{data.slug}.md"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="edit-on-github"
+		>
+			<LucideIcon name="Pencil" size={14} />
+			{i18n.lang === "fa"
+				? "ویرایش این صفحه در GitHub"
+				: "Edit this page on GitHub"}
+		</a>
+	{/if}
+
 	{#if !isMarkdownMode && data.pagination}
 		<div class="pagination-nav">
 			{#if data.pagination.prev}
@@ -483,6 +497,24 @@
 	.markdown-raw-view code {
 		white-space: pre-wrap;
 		word-break: break-all;
+	}
+
+	/* Edit on GitHub */
+	.edit-on-github {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 3rem;
+		padding: 0.5rem 0;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		text-decoration: none;
+		border: none;
+		transition: color 0.2s ease;
+	}
+
+	.edit-on-github:hover {
+		color: var(--primary);
 	}
 
 	/* Pagination Styles */

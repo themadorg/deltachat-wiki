@@ -48,6 +48,8 @@
     "copied": "Copied!",
     "pagination_previous": "Previous",
     "pagination_next": "Next",
+    "zen_enter": "Enter Zen Mode",
+    "zen_exit": "Exit Zen",
     "stories": [
         {
             "title": "What is Delta Chat?",

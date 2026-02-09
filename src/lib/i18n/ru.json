@@ -48,6 +48,8 @@
     "copied": "Скопировано!",
     "pagination_previous": "Назад",
     "pagination_next": "Вперед",
+    "zen_enter": "Режим чтения",
+    "zen_exit": "Выйти",
     "stories": [
         {
             "title": "Что такое Delta Chat?",

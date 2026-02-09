@@ -9,6 +9,7 @@
         Github,
         Sun,
         Moon,
+        Focus,
     } from "@lucide/svelte";
     import LanguageModal from "$lib/components/modals/LanguageModal.svelte";
     import SearchModal from "$lib/components/SearchModal.svelte";
@@ -16,6 +17,7 @@
     import CopyActions from "$lib/components/CopyActions.svelte";
     import DocsSidebar from "$lib/components/DocsSidebar.svelte";
     import { theme } from "$lib/theme.svelte";
+    import { zen } from "$lib/zen.svelte";
     import { onMount } from "svelte";
     import { config } from "../../../config";
     import Logo from "$lib/components/Logo.svelte";
@@ -143,153 +145,186 @@
     <title>{i18n.t("site_title")}</title>
 </svelte:head>
 
-<div class="docs-professional-layout">
+<div class="docs-professional-layout" class:zen-mode={zen.active}>
     <!-- Top Navigation -->
-    <header class="docs-header">
-        <div class="header-container">
-            <div class="header-left">
-                <button
-                    class="mobile-menu-btn"
-                    onclick={() => (isMobileSidebarOpen = !isMobileSidebarOpen)}
-                >
-                    {#if isMobileSidebarOpen}
-                        <X size={24} />
-                    {:else}
-                        <Menu size={24} />
-                    {/if}
-                </button>
-
-                <a href="/{i18n.lang}" class="logo">
-                    <div class="logo-icon">
-                        <Logo size={24} class="header-logo-img" />
-                    </div>
-                    <span class="logo-text">{i18n.t("brand_logo_text")}</span>
-                </a>
-            </div>
-
-            <div class="header-center">
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <div class="search-bar" onclick={() => (showSearch = true)}>
-                    <Search size={16} class="search-icon-svg" />
-                    <span class="search-bar-placeholder"
-                        >{i18n.t("search_placeholder")}</span
-                    >
-                    <span class="search-hint">Ctrl K</span>
-                </div>
-            </div>
-
-            <div class="header-right">
-                <div class="header-actions">
+    {#if !zen.active}
+        <header class="docs-header">
+            <div class="header-container">
+                <div class="header-left">
                     <button
-                        class="action-btn"
-                        onclick={() => theme.toggle()}
-                        title={theme.current === "dark"
-                            ? "Switch to Light Mode"
-                            : "Switch to Dark Mode"}
+                        class="mobile-menu-btn"
+                        onclick={() =>
+                            (isMobileSidebarOpen = !isMobileSidebarOpen)}
                     >
-                        {#if theme.current === "dark"}
-                            <Sun size={20} />
+                        {#if isMobileSidebarOpen}
+                            <X size={24} />
                         {:else}
-                            <Moon size={20} />
+                            <Menu size={24} />
                         {/if}
                     </button>
 
-                    <button
-                        class="action-btn"
-                        onclick={() => (showLangModal = true)}
-                        title={i18n.t("select_language")}
-                    >
-                        <Languages size={20} />
-                    </button>
-
-                    <a
-                        href={config.socials.github}
-                        class="action-btn"
-                        target="_blank"
-                        title="GitHub"
-                    >
-                        <Github size={20} />
+                    <a href="/{i18n.lang}" class="logo">
+                        <div class="logo-icon">
+                            <Logo size={24} class="header-logo-img" />
+                        </div>
+                        <span class="logo-text"
+                            >{i18n.t("brand_logo_text")}</span
+                        >
                     </a>
                 </div>
+
+                <div class="header-center">
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <div class="search-bar" onclick={() => (showSearch = true)}>
+                        <Search size={16} class="search-icon-svg" />
+                        <span class="search-bar-placeholder"
+                            >{i18n.t("search_placeholder")}</span
+                        >
+                        <span class="search-hint">Ctrl K</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button
+                            class="action-btn"
+                            onclick={() => theme.toggle()}
+                            title={theme.current === "dark"
+                                ? "Switch to Light Mode"
+                                : "Switch to Dark Mode"}
+                        >
+                            {#if theme.current === "dark"}
+                                <Sun size={20} />
+                            {:else}
+                                <Moon size={20} />
+                            {/if}
+                        </button>
+
+                        <button
+                            class="action-btn zen-toggle-btn"
+                            onclick={() => zen.enable()}
+                            title={i18n.t("zen_enter")}
+                        >
+                            <Focus size={20} />
+                        </button>
+
+                        <button
+                            class="action-btn"
+                            onclick={() => (showLangModal = true)}
+                            title={i18n.t("select_language")}
+                        >
+                            <Languages size={20} />
+                        </button>
+
+                        <a
+                            href={config.socials.github}
+                            class="action-btn"
+                            target="_blank"
+                            title="GitHub"
+                        >
+                            <Github size={20} />
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
+    {/if}
 
     <!-- Sub-navigation -->
-    <nav class="docs-subnav">
-        <div class="subnav-container">
-            <a
-                href="/{i18n.lang}/docs/general/introduction"
-                class:active={currentSlug?.startsWith("general") ||
-                    !currentSlug}
-            >
-                {i18n.t("subnav_general")}
-            </a>
-            <a
-                href="/{i18n.lang}/docs/webxdc/overview"
-                class:active={currentSlug?.startsWith("webxdc")}
-                >{i18n.t("subnav_webxdc")}</a
-            >
-            <a
-                href="/{i18n.lang}/docs/bot/overview"
-                class:active={currentSlug?.startsWith("bot")}
-                >{i18n.t("subnav_bot")}</a
-            >
-            <a
-                href="/{i18n.lang}/docs/servers/overview"
-                class:active={currentSlug?.startsWith("servers")}
-                >{i18n.t("subnav_servers")}</a
-            >
-        </div>
-    </nav>
+    {#if !zen.active}
+        <nav class="docs-subnav">
+            <div class="subnav-container">
+                <a
+                    href="/{i18n.lang}/docs/general/introduction"
+                    class:active={currentSlug?.startsWith("general") ||
+                        !currentSlug}
+                >
+                    {i18n.t("subnav_general")}
+                </a>
+                <a
+                    href="/{i18n.lang}/docs/webxdc/overview"
+                    class:active={currentSlug?.startsWith("webxdc")}
+                    >{i18n.t("subnav_webxdc")}</a
+                >
+                <a
+                    href="/{i18n.lang}/docs/bot/overview"
+                    class:active={currentSlug?.startsWith("bot")}
+                    >{i18n.t("subnav_bot")}</a
+                >
+                <a
+                    href="/{i18n.lang}/docs/servers/overview"
+                    class:active={currentSlug?.startsWith("servers")}
+                    >{i18n.t("subnav_servers")}</a
+                >
+            </div>
+        </nav>
+    {/if}
 
     <div class="docs-container">
         <!-- Sidebar -->
-        <aside class="docs-sidebar" class:open={isMobileSidebarOpen}>
-            <DocsSidebar
-                currentSlug={currentSlug || ""}
-                onNavigate={() => (isMobileSidebarOpen = false)}
-            />
-        </aside>
+        {#if !zen.active}
+            <aside class="docs-sidebar" class:open={isMobileSidebarOpen}>
+                <DocsSidebar
+                    currentSlug={currentSlug || ""}
+                    onNavigate={() => (isMobileSidebarOpen = false)}
+                />
+            </aside>
+        {/if}
 
         <!-- Main Content Area -->
         <main class="docs-main">
             <div class="content-wrapper">
-                <div class="content-top-actions">
-                    <Breadcrumbs />
-                    <div class="page-actions">
-                        <CopyActions />
+                {#if !zen.active}
+                    <div class="content-top-actions">
+                        <Breadcrumbs />
+                        <div class="page-actions">
+                            <CopyActions />
+                        </div>
                     </div>
-                </div>
+                {/if}
                 {@render children()}
             </div>
 
             <!-- Table of Contents (Right Side) -->
-            <aside class="docs-toc">
-                {#if headings && headings.length > 0}
-                    <div class="toc-container">
-                        <h4 class="toc-title">{i18n.t("toc_title")}</h4>
-                        <nav class="toc-nav">
-                            <ul>
-                                {#each headings as heading}
-                                    <li class:depth-3={heading.level === 3}>
-                                        <a
-                                            href="#{heading.id}"
-                                            class:active={activeHeadingId ===
-                                                heading.id}
-                                        >
-                                            {@html heading.html}
-                                        </a>
-                                    </li>
-                                {/each}
-                            </ul>
-                        </nav>
-                    </div>
-                {/if}
-            </aside>
+            {#if !zen.active}
+                <aside class="docs-toc">
+                    {#if headings && headings.length > 0}
+                        <div class="toc-container">
+                            <h4 class="toc-title">{i18n.t("toc_title")}</h4>
+                            <nav class="toc-nav">
+                                <ul>
+                                    {#each headings as heading}
+                                        <li class:depth-3={heading.level === 3}>
+                                            <a
+                                                href="#{heading.id}"
+                                                class:active={activeHeadingId ===
+                                                    heading.id}
+                                            >
+                                                {@html heading.html}
+                                            </a>
+                                        </li>
+                                    {/each}
+                                </ul>
+                            </nav>
+                        </div>
+                    {/if}
+                </aside>
+            {/if}
         </main>
     </div>
+
+    <!-- Zen mode floating exit button -->
+    {#if zen.active}
+        <button
+            class="zen-exit-btn"
+            onclick={() => zen.disable()}
+            title={i18n.t("zen_exit")}
+        >
+            <X size={18} />
+            <span>{i18n.t("zen_exit")}</span>
+        </button>
+    {/if}
 
     <LanguageModal bind:show={showLangModal} />
     <SearchModal bind:show={showSearch} />
@@ -714,6 +749,129 @@
             gap: 0.35rem;
             border: none;
             padding-inline-start: 0;
+        }
+    }
+
+    /* ===================== Zen Mode ===================== */
+
+    /* Zen toggle button in header */
+    .zen-toggle-btn:hover {
+        color: var(--primary) !important;
+    }
+
+    /* Zen mode layout — content centered, no sidebar/toc */
+    .zen-mode .docs-container {
+        justify-content: center;
+    }
+
+    .zen-mode .docs-main {
+        max-width: 780px;
+        margin: 0 auto;
+    }
+
+    .zen-mode .content-wrapper {
+        max-width: 100%;
+        padding: 4rem 3rem 3rem;
+    }
+
+    /* Zen mode typography — larger, more spacious for reading */
+    :global(.zen-mode .prose) {
+        font-size: 1.125rem;
+        line-height: 1.9;
+    }
+
+    :global(.zen-mode .prose h1) {
+        font-size: 2.75rem;
+        margin-bottom: 2.5rem;
+        letter-spacing: -0.03em;
+    }
+
+    :global(.zen-mode .prose h2) {
+        font-size: 2rem;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    :global(.zen-mode .prose h3) {
+        font-size: 1.4rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    :global(.zen-mode .prose p) {
+        margin-bottom: 1.75rem;
+    }
+
+    :global(.zen-mode .prose ul),
+    :global(.zen-mode .prose ol) {
+        margin-bottom: 1.75rem;
+    }
+
+    :global(.zen-mode .prose li) {
+        margin-bottom: 0.625rem;
+    }
+
+    :global(.zen-mode .prose blockquote) {
+        margin: 3rem 0;
+        padding: 1.5rem 1.75rem;
+    }
+
+    /* Floating exit button — top right */
+    .zen-exit-btn {
+        position: fixed;
+        top: 1.25rem;
+        inset-inline-end: 1.25rem;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg-surface);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        color: var(--text-muted);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .zen-exit-btn:hover {
+        color: var(--text);
+        border-color: var(--primary);
+        box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.2),
+            0 0 0 3px var(--primary-glow);
+        transform: translateY(-1px);
+    }
+
+    :global([data-theme="light"]) .zen-exit-btn {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    :global([data-theme="light"]) .zen-exit-btn:hover {
+        box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.12),
+            0 0 0 3px var(--primary-glow);
+    }
+
+    @media (max-width: 600px) {
+        .zen-mode .content-wrapper {
+            padding: 1.5rem 1rem;
+        }
+
+        .zen-exit-btn {
+            top: 0.75rem;
+            inset-inline-end: 0.75rem;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .zen-exit-btn span {
+            display: none;
         }
     }
 </style>

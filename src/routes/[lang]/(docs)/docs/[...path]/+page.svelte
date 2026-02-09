@@ -7,6 +7,7 @@
 	import SEO from "$lib/components/SEO.svelte";
 
 	import { browser } from "$app/environment";
+	import { zen } from "$lib/zen.svelte";
 
 	let { data } = $props();
 	const i18n = getI18n();
@@ -118,7 +119,7 @@
 		</div>
 	{/if}
 
-	{#if !isMarkdownMode && data.slug}
+	{#if !isMarkdownMode && !zen.active && data.slug}
 		<a
 			href="https://github.com/themadorg/deltachat-wiki/edit/main/src/docs/{i18n.lang}/{data.slug}.md"
 			target="_blank"
@@ -132,7 +133,7 @@
 		</a>
 	{/if}
 
-	{#if !isMarkdownMode && data.pagination}
+	{#if !isMarkdownMode && !zen.active && data.pagination}
 		<div class="pagination-nav">
 			{#if data.pagination.prev}
 				<a

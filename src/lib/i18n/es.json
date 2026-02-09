@@ -48,6 +48,8 @@
     "copied": "¡Copiado!",
     "pagination_previous": "Anterior",
     "pagination_next": "Siguiente",
+    "zen_enter": "Modo lectura",
+    "zen_exit": "Salir",
     "stories": [
         {
             "title": "¿Qué es Delta Chat?",

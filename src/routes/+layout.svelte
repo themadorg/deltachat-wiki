@@ -6,6 +6,7 @@
 	import { browser } from "$app/environment";
 	import { page } from "$app/state";
 	import { handleExternalClick } from "$lib/webxdc.svelte";
+	import { zen } from "$lib/zen.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import ExternalLinkModal from "$lib/components/ExternalLinkModal.svelte";
 	import SEO from "$lib/components/SEO.svelte";
@@ -68,7 +69,9 @@
 		| "rtl") || "ltr"}
 >
 	{@render children()}
-	<Footer />
+	{#if !zen.active}
+		<Footer />
+	{/if}
 </div>
 
 <ExternalLinkModal />

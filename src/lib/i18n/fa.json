@@ -35,6 +35,8 @@
     "copied": "کپی شد!",
     "pagination_previous": "قبلی",
     "pagination_next": "بعدی",
+    "zen_enter": "حالت تمرکز",
+    "zen_exit": "خروج از حالت تمرکز",
     "stories": [
         {
             "title": "دلتاچت چیست؟",

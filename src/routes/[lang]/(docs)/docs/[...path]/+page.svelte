@@ -4,6 +4,7 @@
 	import { copyToClipboard } from "$lib/clipboard";
 	import { page } from "$app/state";
 	import LucideIcon from "$lib/components/LucideIcon.svelte";
+	import SEO from "$lib/components/SEO.svelte";
 
 	import { browser } from "$app/environment";
 
@@ -84,10 +85,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{meta.title || "Docs"} - {i18n.t("site_title")}</title>
-	<meta name="description" content={meta.description || ""} />
-</svelte:head>
+<SEO title={meta.title || "Docs"} description={meta.description} />
 
 <article class="prose doc-content-article">
 	{#if isMarkdownMode}

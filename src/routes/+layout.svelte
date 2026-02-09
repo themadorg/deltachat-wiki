@@ -8,6 +8,7 @@
 	import { handleExternalClick } from "$lib/webxdc.svelte";
 	import Footer from "$lib/components/Footer.svelte";
 	import ExternalLinkModal from "$lib/components/ExternalLinkModal.svelte";
+	import SEO from "$lib/components/SEO.svelte";
 
 	let { children } = $props();
 
@@ -53,9 +54,12 @@
 		name="theme-color"
 		content={theme.current === "dark" ? "#0f172a" : "#ffffff"}
 	/>
-	<title>{i18n.t("site_title")}</title>
-	<meta name="description" content={i18n.t("hero_subtitle")} />
+	<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	<link rel="manifest" href="/manifest.toml" />
 </svelte:head>
+
+<SEO />
 
 <div
 	class="root-container"

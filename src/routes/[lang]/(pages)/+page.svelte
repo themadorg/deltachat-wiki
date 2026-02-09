@@ -2,6 +2,7 @@
 	import Stories from "$lib/components/Stories.svelte";
 	import { getI18n } from "$lib/i18n.svelte";
 	import { Sparkles } from "@lucide/svelte";
+	import SEO from "$lib/components/SEO.svelte";
 
 	let { data } = $props();
 	const i18n = getI18n();
@@ -20,9 +21,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{i18n.t("site_title")}</title>
-</svelte:head>
+<SEO />
 
 {#if showStories}
 	<Stories onFinish={closeStories} />

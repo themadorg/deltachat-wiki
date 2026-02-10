@@ -32,6 +32,9 @@
 
     // Preserve zen mode across internal page navigations
     beforeNavigate((navigation) => {
+        // Skip if we are explicitly navigating out of zen mode
+        if (zen.isNavigatingOut) return;
+
         const fromZen = navigation.from?.url.searchParams.get("zen") === "true";
         const toUrl = navigation.to?.url;
 

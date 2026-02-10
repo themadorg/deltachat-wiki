@@ -11,6 +11,7 @@ import { goto } from "$app/navigation";
 
 // Guard against concurrent navigation
 let _navigating = false;
+let _isNavigatingOut = $state(false);
 
 export const zen = {
     get active(): boolean {
@@ -18,9 +19,14 @@ export const zen = {
         return page.url.searchParams.get("zen") === "true";
     },
 
+    get isNavigatingOut() {
+        return _isNavigatingOut;
+    },
+
     async enable() {
         if (_navigating || !browser) return;
         _navigating = true;
+        _isNavigatingOut = false;
         try {
             const url = new URL(page.url);
             url.searchParams.set("zen", "true");
@@ -33,12 +39,17 @@ export const zen = {
     async disable() {
         if (_navigating || !browser) return;
         _navigating = true;
+        _isNavigatingOut = true;
         try {
             const url = new URL(page.url);
             url.searchParams.delete("zen");
             await goto(url.toString(), { replaceState: true, keepFocus: true, noScroll: true });
         } finally {
             _navigating = false;
+            // Reset after navigation finishes
+            setTimeout(() => {
+                _isNavigatingOut = false;
+            }, 100);
         }
     },
 

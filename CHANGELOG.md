@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/themadorg/deltachat-wiki/compare/v1.2.0...v1.3.0) (2026-02-10)
+
+
+### Features
+
+* **zen:** preserve zen mode across page navigation ([6368307](https://github.com/themadorg/deltachat-wiki/commit/636830783f47e905a9921e87c2eaf6d87f8d516f))
+
 # [1.2.0](https://github.com/themadorg/deltachat-wiki/compare/v1.1.0...v1.2.0) (2026-02-09)
 
 

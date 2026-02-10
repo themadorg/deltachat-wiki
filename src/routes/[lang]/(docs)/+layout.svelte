@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { beforeNavigate, goto } from "$app/navigation";
     import { getI18n } from "$lib/i18n.svelte";
     import {
         Languages,
@@ -28,6 +29,19 @@
     let showLangModal = $state(false);
     let showSearch = $state(false);
     let isMobileSidebarOpen = $state(false);
+
+    // Preserve zen mode across internal page navigations
+    beforeNavigate((navigation) => {
+        const fromZen = navigation.from?.url.searchParams.get("zen") === "true";
+        const toUrl = navigation.to?.url;
+
+        if (fromZen && toUrl && !toUrl.searchParams.has("zen")) {
+            navigation.cancel();
+            const url = new URL(toUrl);
+            url.searchParams.set("zen", "true");
+            goto(url.toString(), { keepFocus: true, noScroll: false });
+        }
+    });
 
     onMount(() => {
         // Global Ctrl+K / Cmd+K shortcut to open search

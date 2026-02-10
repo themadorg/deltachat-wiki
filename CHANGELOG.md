@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/themadorg/deltachat-wiki/compare/v1.3.1...v1.3.2) (2026-02-10)
+
+
+### Bug Fixes
+
+* add Autocrypt v2 ([107c51c](https://github.com/themadorg/deltachat-wiki/commit/107c51cf681633579335e750e2a3509255ac149c))
+
 ## [1.3.1](https://github.com/themadorg/deltachat-wiki/compare/v1.3.0...v1.3.1) (2026-02-10)
 
 

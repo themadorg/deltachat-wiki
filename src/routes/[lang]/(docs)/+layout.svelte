@@ -252,28 +252,17 @@
     {#if !zen.active}
         <nav class="docs-subnav">
             <div class="subnav-container">
-                <a
-                    href="/{i18n.lang}/docs/general/introduction"
-                    class:active={currentSlug?.startsWith("general") ||
-                        !currentSlug}
-                >
-                    {i18n.t("subnav_general")}
-                </a>
-                <a
-                    href="/{i18n.lang}/docs/webxdc/overview"
-                    class:active={currentSlug?.startsWith("webxdc")}
-                    >{i18n.t("subnav_webxdc")}</a
-                >
-                <a
-                    href="/{i18n.lang}/docs/bot/overview"
-                    class:active={currentSlug?.startsWith("bot")}
-                    >{i18n.t("subnav_bot")}</a
-                >
-                <a
-                    href="/{i18n.lang}/docs/servers/overview"
-                    class:active={currentSlug?.startsWith("servers")}
-                    >{i18n.t("subnav_servers")}</a
-                >
+                {#each config.navigation.subnav as item}
+                    <a
+                        href="/{i18n.lang}/docs/{item.slug}"
+                        class:active={item.prefix === "general"
+                            ? currentSlug?.startsWith(item.prefix) ||
+                              !currentSlug
+                            : currentSlug?.startsWith(item.prefix)}
+                    >
+                        {i18n.t(item.labelKey)}
+                    </a>
+                {/each}
             </div>
         </nav>
     {/if}

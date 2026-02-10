@@ -1,4 +1,13 @@
 export const config = {
+    navigation: {
+        subnav: [
+            { labelKey: "subnav_general", slug: "general/introduction", prefix: "general" },
+            { labelKey: "subnav_webxdc", slug: "webxdc/overview", prefix: "webxdc" },
+            { labelKey: "subnav_bot", slug: "bot/overview", prefix: "bot" },
+            { labelKey: "subnav_servers", slug: "servers/overview", prefix: "servers" },
+            { labelKey: "subnav_autocrypt2", slug: "autocrypt2/overview", prefix: "autocrypt2" }
+        ]
+    },
     brand: {
         name: "deltachat.wiki",
         tagline: "An unofficial guide to Delta Chat, a secure and open source decentralized messaging platform.",

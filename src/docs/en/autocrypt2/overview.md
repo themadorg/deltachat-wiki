@@ -11,7 +11,7 @@ category: autocrypt2
 
 # Autocrypt v2
 
-Autocrypt v2 is the next version of the Autocrypt email encryption standard. It brings **post-quantum cryptography**, **automatic key rotation**, and **reliable deletion** of old encryption keys. It is designed so that any email app can use it — even apps that only support basic OpenPGP.
+Autocrypt v2 is the next version of the Autocrypt email encryption standard. It brings **post-quantum cryptography**, **automatic key rotation**, and **reliable deletion** of messages — user-deleted messages become truly unrecoverable through scheduled key destruction. It is designed so that any email app can use it — even apps that only support basic OpenPGP.
 
 ## What is Autocrypt?
 
@@ -28,7 +28,7 @@ Quantum computers may one day break today's encryption. Autocrypt v2 uses **ML-K
 
 ### Reliable Deletion
 
-Old encryption keys are automatically destroyed after a set time period. This means that even if someone gets access to your device later, they cannot read old messages whose keys have already been deleted. This property is called **forward secrecy**.
+When you delete a message, it should stay deleted — permanently. Autocrypt v2 makes this possible through scheduled key rotation: old encryption keys are automatically destroyed after a set time period. This means that even if an attacker recorded your encrypted messages as they passed through the network and later compromises your device, the messages you deleted are truly gone — the keys needed to decrypt the recorded copies no longer exist. This property is commonly called **forward secrecy**.
 
 ### No Extra Coordination
 
@@ -55,7 +55,7 @@ Autocrypt v2 certificates are standard OpenPGP v6 certificates. Any email app th
   />
   <ToolCard
     title="Reliable Deletion"
-    description="Understand how old key material is reliably deleted to protect past messages."
+    description="Learn how Autocrypt v2 makes user-deleted messages truly unrecoverable, even against attackers who recorded all encrypted traffic."
     icon="Trash2"
     href="autocrypt2/reliable-deletion"
   />

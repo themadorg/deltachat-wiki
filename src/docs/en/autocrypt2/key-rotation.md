@@ -7,7 +7,7 @@ order: 3
 
 # Key Rotation & Ratcheting
 
-One of the most important features of Autocrypt v2 is **automatic key rotation**. Encryption keys are regularly replaced with new ones, and old keys are destroyed. This limits the damage if a key is ever stolen & provides **forward secrecy**.
+One of the most important features of Autocrypt v2 is **automatic key rotation**. Encryption keys are regularly replaced with new ones, and old keys are destroyed. This is the mechanism that enables **[reliable deletion](/autocrypt2/reliable-deletion)** — when a user deletes a message and the corresponding old key is destroyed, even an attacker who recorded the encrypted message in transit can never recover it.
 
 ## What is Key Rotation?
 

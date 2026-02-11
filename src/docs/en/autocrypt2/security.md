@@ -25,9 +25,9 @@ Autocrypt v2 uses **ML-KEM-768+X25519** for encryption. This hybrid approach ens
 - **Tomorrow**: ML-KEM-768 provides security against quantum computers.
 - **Belt-and-suspenders**: Even if one algorithm is broken, the other still protects your messages.
 
-### 3. Forward Secrecy
+### 3. Reliable Deletion (Forward Secrecy)
 
-Old encryption keys are regularly destroyed through [key rotation](/autocrypt2/key-rotation) and [reliable deletion](/autocrypt2/reliable-deletion). Past messages cannot be decrypted even if current keys are compromised.
+When a user deletes a message, it should become truly unrecoverable — even against an attacker who recorded the encrypted copy as it passed through the network and later compromises the user's device. Through scheduled [key rotation](/autocrypt2/key-rotation), old encryption keys are automatically destroyed, making the recorded encrypted copies permanently unreadable. See [Reliable Deletion](/autocrypt2/reliable-deletion) for details.
 
 ### 4. No Identity Binding
 
@@ -46,7 +46,7 @@ The system is designed to work with **email**, which is asynchronous and decentr
 | **Passive eavesdropping** | ✅ Messages are end-to-end encrypted. Network observers see only encrypted data. |
 | **Server compromise** | ✅ The email server never has access to secret keys. It can only see encrypted message envelopes. |
 | **Future quantum attacks** | ✅ ML-KEM-768 is designed to be secure against quantum computers (NIST FIPS 203). |
-| **Key theft (past messages)** | ✅ Forward secrecy through key rotation. Old keys are destroyed. |
+| **Key theft (past messages)** | ✅ Reliable deletion through key rotation. Old keys are destroyed; deleted messages whose keys have been rotated away are unrecoverable. |
 | **Metadata minimization** | ✅ No User IDs in the certificate reduce identity exposure. |
 
 ### What Autocrypt v2 Does NOT Protect Against

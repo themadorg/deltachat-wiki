@@ -73,7 +73,7 @@ Here is the complete list of cryptographic algorithms used in Autocrypt v2:
 
 ### Why These Algorithms?
 
-- **Ed25519** is used instead of Ed448 for the *specification* to keep certificates smaller. The reference implementation uses Ed448, but the specification supports both. Ed25519 provides 128-bit security against classical attacks, which is widely considered sufficient.
+- **Ed25519** is the default algorithm specified for the primary key to keep certificates smaller. Ed25519 provides 128-bit security against classical attacks, which is widely considered sufficient. The reference implementations may use Ed448 for higher security margins.
 - **ML-KEM-768** provides NIST Security Level 3 (roughly 192-bit classical equivalent). ML-KEM-1024 was considered but would make certificates significantly larger.
 - **X25519** is the most widely deployed elliptic curve Diffie-Hellman function. It is fast, constant-time, and well-analyzed.
 - **AES-256-OCB** is an efficient AEAD mode that provides both confidentiality and integrity. OCB is particularly fast and has a clean security proof.
@@ -106,10 +106,10 @@ Autocrypt v2 uses **deterministic binding signatures** for rotating subkeys. Thi
 The binding signature salt is computed as:
 
 ```
-bssalt = SHA512(ks[0:64])[0:32]
+bssalt = SHA512(ks[0:64])[0:16]
 ```
 
-where `ks[0:64]` is the first 64 bytes of the HKDF output. This provides 256 bits of entropy, which is more than sufficient for signature salt.
+where `ks[0:64]` is the first 64 bytes of the HKDF output. This provides 128 bits of entropy for the signature salt.
 
 ## Secure Transfer of Secret Keys
 
@@ -143,7 +143,7 @@ This means:
 
 | System | Post-Quantum | Forward Secrecy | Offline Capable | No Coordination |
 |--------|-------------|----------------|----------------|----------------|
-| **Autocrypt v2** | ✅ ML-KEM-768 | ✅ ~30-60 day rotation | ✅ Yes | ✅ Yes |
+| **Autocrypt v2** | ✅ ML-KEM-768 | ✅ ~5-10 day rotation | ✅ Yes | ✅ Yes |
 | **Signal (Double Ratchet)** | ❌ X25519 only | ✅ Per-message | ❌ Requires online first message | ❌ Requires coordination |
 | **PGP (traditional)** | ❌ RSA/ECDH | ❌ No rotation | ✅ Yes | ✅ Yes |
 | **Autocrypt v1** | ❌ RSA/Curve25519 | ❌ No rotation | ✅ Yes | ✅ Yes |

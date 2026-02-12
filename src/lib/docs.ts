@@ -57,7 +57,8 @@ export async function getSidebarWithPath(fullPath: string, lang: string = 'en'):
     return null;
 }
 
-export async function getDoc(path: string, lang: string) {
+export async function getDoc(path: string | undefined, lang: string) {
+    if (!path) return null;
     const allDocs = import.meta.glob('/src/docs/**/*.md');
 
     // Normalize path
@@ -92,7 +93,8 @@ export async function getDoc(path: string, lang: string) {
 
     return null;
 }
-export async function getRawDoc(path: string, lang: string) {
+export async function getRawDoc(path: string | undefined, lang: string) {
+    if (!path) return null;
     const allDocsRaw = import.meta.glob('/src/docs/**/*.md', { query: '?raw', import: 'default' });
 
     // Normalize path

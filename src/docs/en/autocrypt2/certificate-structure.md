@@ -101,7 +101,7 @@ The **rotating subkey** is the main encryption key that people should use when s
 
 - **Purpose**: Short-term encryption. Provides forward secrecy.
 - **Algorithm**: **ML-KEM-768+X25519** (same as the fallback).
-- **Expiration**: Set to **max_rd** (the maximum rotation duration, default: about 60 days).
+- **Expiration**: Set to **max_rd** (the maximum rotation duration, default: 10 days = 864000 seconds).
 - **Key Flags**: Encrypt Communications only (not Encrypt Storage).
 
 ### Why Only "Encrypt Communications"?
@@ -146,25 +146,24 @@ Here is how the certificate evolves over time:
              |   |  +--------------------------------------'
              |   |
   min_rd    .--- +--+-------------------------------------------.
-             |   |  | time to ratchet:                           |
-              '--+  |   generate next rotating subkey            |
-             |   |  |   apply next rotating subkey to cert       |
-             |   |  |   distribute updated cert to peers         |
-             |   |  +-------------------------------------------'
+    |      | |   |  | new rotating subkey derived (AC2_Ratchet)  |
+    |      | |   |  | new subkey deterministically bound to cert |
+     '-----+ |   |  | cert redistribution begins                 |
+           | |   |  +-------------------------------------------'
+           | |   |
+            '-+- +--+-----------------------------------------.
+ max_latency |   |  | first rotating subkey expires            |
+     |       |   |  | peers drop first subkey from merged cert |
+      '------+   |  +-----------------------------------------'
              |   |
-             '-- +--+-------------------------------------------.
-                 |  | previous rotating subkey expires           |
-                 |  | (peers should stop encrypting to it)      |
-                 |  +-------------------------------------------'
-                 |
-                 +--+-------------------------------------------.
-                 |  | SECRET key of previous rotating subkey is  |
-                 |  | destroyed by all UMAs                      |
-                 |  +-------------------------------------------'
+              '- +--+------------------------------------------.
+                 |  | msgs recv'd+processed from all transports |
+                 |  | destroy first rotating secret subkey      |
+                 |  +------------------------------------------'
                  v
 ```
 
-This schedule means there is always a valid rotating subkey available. Old subkeys expire before new ones take over, creating a smooth, overlapping transition.
+This schedule means there is always a valid rotating subkey available. Old subkeys expire and after a grace period (`max_latency`) for late message delivery, the corresponding secret key material is destroyed by all UMAs.
 
 ## No User IDs
 
@@ -176,14 +175,8 @@ Unlike many traditional OpenPGP certificates, Autocrypt v2 certificates have **n
 
 ## Certificate Size
 
-An Autocrypt v2 public certificate is approximately **3,164 bytes** (about 3 KB). This is small enough to include in email headers, which is how Autocrypt distributes certificates.
+An outbound Autocrypt v2 certificate is **2938 octets** (about 3 KB) in binary form. This is small enough to include in email headers, which is how Autocrypt distributes certificates.
 
-| Part | Approximate Size |
-|------|-----------------|
-| Primary key packet | ~69 bytes |
-| Direct key signature | ~221 bytes |
-| Fallback subkey + signature | ~1,437 bytes |
-| Rotating subkey + signature | ~1,437 bytes |
-| **Total** | **~3,164 bytes** |
+A certificate for a peer should be merged into the locally cached certificate, which may thus contain multiple rotating subkeys and grow accordingly.
 
 Most of the size comes from the ML-KEM-768 public keys, which are larger than classical keys. This is the trade-off for post-quantum security.

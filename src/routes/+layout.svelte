@@ -11,22 +11,28 @@
 	import ExternalLinkModal from "$lib/components/ExternalLinkModal.svelte";
 	import SEO from "$lib/components/SEO.svelte";
 
-	let { children } = $props();
+	let { children, data } = $props();
 
-	// Derive language from URL params — single source of truth
-	let urlLang = $derived(page.params?.lang || "fa");
+	// Use server data for initial lang (always correct, no race condition)
+	const initialLang = data?.lang || "en";
 
-	// Initialize i18n context (one-time, then $effect handles reactive sync)
-	const i18n = setI18n(page.params?.lang || "fa");
+	// Initialize i18n context with server-provided lang
+	const i18n = setI18n(initialLang);
 
-	// Reactively sync i18n state whenever the URL lang param changes
+	// Reactively sync i18n state whenever URL lang param changes
 	$effect(() => {
-		i18n.syncFromUrl(urlLang);
+		const urlLang = page.params?.lang;
+		if (urlLang) {
+			i18n.syncFromUrl(urlLang);
+		}
 
 		// Update <html> attributes to match
 		if (browser) {
-			const langInfo = supportedLanguages.find((l) => l.code === urlLang);
-			document.documentElement.lang = urlLang;
+			const currentLang = urlLang || i18n.lang;
+			const langInfo = supportedLanguages.find(
+				(l) => l.code === currentLang,
+			);
+			document.documentElement.lang = currentLang;
 			document.documentElement.dir = langInfo?.dir || "ltr";
 		}
 	});
@@ -57,7 +63,6 @@
 	/>
 	<link rel="icon" type="image/svg+xml" href="/icon.svg" />
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-	<link rel="manifest" href="/manifest.toml" />
 </svelte:head>
 
 <SEO />

@@ -1,8 +1,16 @@
 <script lang="ts">
 	import Stories from "$lib/components/Stories.svelte";
 	import { getI18n } from "$lib/i18n.svelte";
-	import { Sparkles } from "@lucide/svelte";
+	import {
+		Sparkles,
+		Shield,
+		Share2,
+		Globe,
+		Box,
+		ArrowRight,
+	} from "@lucide/svelte";
 	import SEO from "$lib/components/SEO.svelte";
+	import HeroAnimation from "$lib/components/HeroAnimation.svelte";
 
 	let { data } = $props();
 	const i18n = getI18n();
@@ -10,7 +18,7 @@
 	let showStories = $state(false);
 
 	// Docs come from SvelteKit's load function, which re-runs on URL navigation
-	let displayDocs = $derived(data.docs);
+	let displayDocs = $derived(data.docs || []);
 
 	function openStories() {
 		showStories = true;
@@ -29,54 +37,120 @@
 
 <div class="landing-page">
 	<header class="hero">
-		<div class="hero-badge">
-			<Sparkles size={14} class="sparkle-icon" />
-			{i18n.t("hero_badge")}
-		</div>
-		<h1>{@html i18n.t("hero_title")}</h1>
-		<p class="subtitle">{i18n.t("hero_subtitle")}</p>
+		<HeroAnimation />
+		<div class="hero-content">
+			<div class="hero-badge">
+				<Sparkles size={14} class="sparkle-icon" />
+				{i18n.t("hero_badge")}
+			</div>
+			<h1>{@html i18n.t("hero_title")}</h1>
+			<p class="subtitle">{i18n.t("hero_subtitle")}</p>
 
-		<button class="minimal-btn" onclick={openStories}>
-			<span class="pulse"></span>
-			{i18n.t("hero_button")}
-		</button>
+			<div class="hero-actions">
+				<a
+					href="/{data.lang}/docs/general/introduction"
+					class="primary-btn"
+				>
+					{i18n.t("hero_button")}
+					<ArrowRight size={20} />
+				</a>
+				<button class="minimal-btn" onclick={openStories}>
+					<span class="pulse"></span>
+					{i18n.t("hero_button_stories") || "Quick Overview"}
+				</button>
+			</div>
+		</div>
 	</header>
 
-	<section class="docs-grid">
-		{#each displayDocs as doc}
-			<a href="/{data.lang}/docs/{doc.slug}" class="doc-card">
-				<div class="card-content">
-					<h2>{doc.meta?.title || doc.slug}</h2>
-					<p>{doc.meta?.description || ""}</p>
-				</div>
-				<div class="card-footer">
-					<span class="read-more">{i18n.t("read_more")}</span>
-				</div>
-			</a>
-		{/each}
+	<section class="features-grid">
+		<div class="feature-card">
+			<div class="icon-box"><Share2 /></div>
+			<h3>{i18n.t("feature_decentralized_title")}</h3>
+			<p>{i18n.t("feature_decentralized_desc")}</p>
+		</div>
+		<div class="feature-card">
+			<div class="icon-box"><Shield /></div>
+			<h3>{i18n.t("feature_encryption_title")}</h3>
+			<p>{i18n.t("feature_encryption_desc")}</p>
+		</div>
+		<div class="feature-card">
+			<div class="icon-box"><Globe /></div>
+			<h3>{i18n.t("feature_universal_title")}</h3>
+			<p>{i18n.t("feature_universal_desc")}</p>
+		</div>
+		<div class="feature-card">
+			<div class="icon-box"><Box /></div>
+			<h3>{i18n.t("feature_webxdc_title")}</h3>
+			<p>{i18n.t("feature_webxdc_desc")}</p>
+		</div>
 	</section>
 
-	<section class="quick-intro">
-		<div class="intro-box">
-			<h2>{i18n.t("why_title")}</h2>
+	<section class="docs-section">
+		<div class="section-header">
+			<h2>{i18n.t("doc_title")}</h2>
 			<p>{i18n.t("why_content")}</p>
+		</div>
+
+		<div class="docs-grid">
+			{#each displayDocs.slice(0, 6) as doc}
+				<a href="/{data.lang}/docs/{doc.slug}" class="doc-card">
+					<div class="card-content">
+						<h3>{doc.meta?.title || doc.slug}</h3>
+						<p>{doc.meta?.description || i18n.t("read_more")}</p>
+					</div>
+					<div class="card-footer">
+						<span class="read-more">{i18n.t("read_more")}</span>
+					</div>
+				</a>
+			{/each}
+		</div>
+
+		<div class="all-docs-btn-container">
+			<a
+				href="/{data.lang}/docs/general/introduction"
+				class="outline-btn"
+			>
+				View All Documentation
+			</a>
 		</div>
 	</section>
 </div>
 
 <style>
 	.landing-page {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
-		padding: 6rem 2rem;
+		padding: 0 2rem 8rem;
+		overflow-x: hidden;
 	}
 
 	.hero {
-		text-align: center;
-		margin-bottom: 6rem;
+		min-height: 85vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		text-align: center;
+		position: relative;
+		margin-bottom: 4rem;
+	}
+
+	.hero-content {
+		max-width: 900px;
+		z-index: 1;
+		padding: 2rem;
+		animation: fadeIn 1s ease-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	.hero-badge {
@@ -88,41 +162,26 @@
 		font-weight: 700;
 		margin-bottom: 2rem;
 		border: 1px solid rgba(59, 130, 246, 0.15);
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		gap: 0.6rem;
 		backdrop-filter: blur(10px);
 		letter-spacing: 0.02em;
 		text-transform: uppercase;
-		transition: all 0.3s ease;
 	}
 
 	:global([data-theme="dark"]) .hero-badge {
-		background: linear-gradient(
-			135deg,
-			rgba(59, 130, 246, 0.1) 0%,
-			rgba(45, 212, 191, 0.1) 100%
-		);
+		background: rgba(59, 130, 246, 0.15);
 		color: #60a5fa;
-		border: 1px solid rgba(59, 130, 246, 0.2);
-	}
-
-	:global(.sparkle-icon) {
-		color: #f59e0b;
-		filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.3));
-	}
-
-	:global([data-theme="dark"]) :global(.sparkle-icon) {
-		color: #fbbf24;
-		filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
 	}
 
 	h1 {
-		font-size: clamp(3rem, 8vw, 5rem);
+		font-size: clamp(3.5rem, 10vw, 6rem);
 		font-weight: 900;
-		margin-bottom: 1.5rem;
-		letter-spacing: -0.05em;
-		line-height: 1.1;
+		margin-bottom: 2rem;
+		letter-spacing: -0.04em;
+		line-height: 0.95;
+		color: var(--text);
 	}
 
 	:global(.accent) {
@@ -132,54 +191,67 @@
 		-webkit-text-fill-color: transparent;
 	}
 
-	:global([data-theme="dark"]) :global(.accent) {
-		background: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
-		-webkit-background-clip: text;
-		background-clip: text;
+	.subtitle {
+		font-size: clamp(1.25rem, 3vw, 1.75rem);
+		color: var(--text-muted);
+		max-width: 700px;
+		margin: 0 auto 3.5rem;
+		line-height: 1.5;
 	}
 
-	.subtitle {
-		font-size: 1.5rem;
-		color: var(--text-muted);
-		max-width: 800px;
-		margin: 0 auto 3rem;
-		line-height: 1.6;
+	.hero-actions {
+		display: flex;
+		gap: 1.5rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.primary-btn {
+		background: var(--primary);
+		color: white;
+		padding: 1.25rem 2.5rem;
+		border-radius: 16px;
+		font-size: 1.25rem;
+		font-weight: 700;
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+	}
+
+	.primary-btn:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 20px 35px -10px rgba(59, 130, 246, 0.5);
 	}
 
 	.minimal-btn {
-		background: rgba(59, 130, 246, 0.1);
-		border: 1px solid rgba(59, 130, 246, 0.3);
-		color: #3b82f6;
-		padding: 1.25rem 3rem;
-		border-radius: 99px;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--border);
+		color: var(--text);
+		padding: 1.25rem 2.5rem;
+		border-radius: 16px;
 		font-size: 1.25rem;
 		font-weight: 700;
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		position: relative;
+		transition: all 0.3s ease;
 	}
 
 	.minimal-btn:hover {
-		background: #3b82f6;
-		color: white;
-		transform: scale(1.05);
-		box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.5);
+		background: rgba(255, 255, 255, 0.1);
+		border-color: var(--primary);
 	}
 
 	.pulse {
 		width: 12px;
 		height: 12px;
-		background: #3b82f6;
+		background: var(--primary);
 		border-radius: 50%;
-		display: inline-block;
 		animation: pulse 2s infinite;
-	}
-
-	.minimal-btn:hover .pulse {
-		background: white;
 	}
 
 	@keyframes pulse {
@@ -197,119 +269,155 @@
 		}
 	}
 
-	.docs-grid {
+	/* Features Section */
+	.features-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-		gap: 2.5rem;
-		margin-bottom: 8rem;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 2rem;
+		margin-bottom: 10rem;
 	}
 
-	.doc-card {
-		background: rgba(255, 255, 255, 0.03);
+	.feature-card {
+		background: var(--bg-sidebar);
+		padding: 3rem 2rem;
+		border-radius: 32px;
 		border: 1px solid var(--border);
-		padding: 2.5rem;
-		border-radius: 24px;
-		text-decoration: none;
 		transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-		display: flex;
-		flex-direction: column;
-		backdrop-filter: blur(8px);
 		position: relative;
 		overflow: hidden;
 	}
 
-	:global([data-theme="light"]) .doc-card {
-		background: #ffffff;
-		box-shadow:
-			0 4px 6px -1px rgba(0, 0, 0, 0.05),
-			0 2px 4px -1px rgba(0, 0, 0, 0.03);
+	.feature-card:hover {
+		transform: translateY(-10px);
+		border-color: var(--primary);
+		box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
 	}
 
-	.doc-card::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 2px;
-		background: linear-gradient(90deg, transparent, #3b82f6, transparent);
-		opacity: 0;
-		transition: opacity 0.4s;
+	.icon-box {
+		width: 60px;
+		height: 60px;
+		background: rgba(59, 130, 246, 0.1);
+		color: var(--primary);
+		border-radius: 18px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 2rem;
+	}
+
+	.feature-card h3 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		color: var(--text);
+	}
+
+	.feature-card p {
+		color: var(--text-muted);
+		line-height: 1.6;
+		font-size: 1.1rem;
+	}
+
+	/* Docs Section */
+	.docs-section {
+		padding: 4rem 0;
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 5rem;
+	}
+
+	.section-header h2 {
+		font-size: 3rem;
+		font-weight: 900;
+		margin-bottom: 1.5rem;
+	}
+
+	.section-header p {
+		font-size: 1.25rem;
+		color: var(--text-muted);
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.docs-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+
+	.doc-card {
+		background: var(--bg-sidebar);
+		padding: 2.5rem;
+		border-radius: 24px;
+		border: 1px solid var(--border);
+		text-decoration: none;
+		transition: all 0.3s ease;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.doc-card:hover {
-		transform: translateY(-8px) scale(1.02);
 		border-color: var(--primary);
-		background: rgba(255, 255, 255, 0.05);
-		box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+		transform: scale(1.02);
 	}
 
-	:global([data-theme="light"]) .doc-card:hover {
-		background: #ffffff;
-		box-shadow:
-			0 20px 25px -5px rgba(0, 0, 0, 0.1),
-			0 10px 10px -5px rgba(0, 0, 0, 0.04);
-	}
-
-	.doc-card:hover::before {
-		opacity: 1;
-	}
-
-	.doc-card h2 {
-		margin: 0 0 1.25rem;
-		color: var(--text);
-		font-size: 1.75rem;
+	.doc-card h3 {
+		font-size: 1.5rem;
 		font-weight: 700;
+		margin-bottom: 1rem;
+		color: var(--text);
 	}
 
 	.doc-card p {
 		color: var(--text-muted);
-		line-height: 1.7;
 		margin-bottom: 2rem;
-		font-size: 1.1rem;
-	}
-
-	.card-footer {
-		margin-top: auto;
+		line-height: 1.6;
 	}
 
 	.read-more {
-		color: #3b82f6;
+		color: var(--primary);
 		font-weight: 700;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		font-size: 1rem;
 	}
 
-	.quick-intro {
-		border-top: 1px solid var(--border);
-		padding-top: 8rem;
+	.all-docs-btn-container {
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
 	}
 
-	.intro-box {
-		background: rgba(255, 255, 255, 0.03);
-		padding: 4rem;
-		border-radius: 32px;
-		border: 1px solid var(--border);
-		text-align: center;
-		max-width: 900px;
-		margin: 0 auto;
-	}
-
-	:global([data-theme="light"]) .intro-box {
-		background: var(--bg-sidebar);
-	}
-
-	.intro-box h2 {
-		font-size: 2.5rem;
-		margin-bottom: 2rem;
+	.outline-btn {
+		border: 2px solid var(--border);
 		color: var(--text);
+		padding: 1rem 2.5rem;
+		border-radius: 12px;
+		text-decoration: none;
+		font-weight: 700;
+		transition: all 0.3s ease;
 	}
 
-	.intro-box p {
-		font-size: 1.25rem;
-		color: var(--text-muted);
-		line-height: 1.8;
+	.outline-btn:hover {
+		border-color: var(--primary);
+		color: var(--primary);
+	}
+
+	@media (max-width: 768px) {
+		.hero-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.landing-page {
+			padding: 0 1.5rem 4rem;
+		}
+
+		h1 {
+			font-size: 3rem;
+		}
 	}
 </style>

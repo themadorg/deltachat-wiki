@@ -101,6 +101,6 @@ Autocrypt v2 certificates are standard OpenPGP v6 certificates. Any email app th
 Autocrypt v2 is currently an **Internet-Draft** submitted to the IETF (Internet Engineering Task Force). The specification document is:
 
 - **Title**: *Autocrypt v2 OpenPGP Certificates and Transferable Secret Keys*
-- **Authors**: Daniel Kahn Gillmor (ACLU), Holger Krekel, Azul (pep.foundation)
+- **Authors**: Daniel Kahn Gillmor (ACLU), Holger Krekel (merlinux gmbh), Friedel Ziegelmayer (n0 Inc.)
 - **Document**: `draft-autocrypt-openpgp-v2-cert-02`
 - **Links**: [Editor's Copy](https://autocrypt2.codeberg.page/autocrypt-v2-cert/) · [IETF Datatracker](https://datatracker.ietf.org/doc/draft-autocrypt-openpgp-v2-cert/)

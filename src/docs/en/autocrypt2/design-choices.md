@@ -22,7 +22,7 @@ The binding between a certificate and an email address happens at the applicatio
 
 ## Why Time-Based Rotation Instead of Message-Based?
 
-Systems like Signal's Double Ratchet rotate keys on every message. Autocrypt v2 uses time-based rotation (~30 day intervals). Why?
+Systems like Signal's Double Ratchet rotate keys on every message. Autocrypt v2 uses time-based rotation (~5 day intervals). Why?
 
 **Email is asynchronous**: Messages can be delayed, queued on servers, or delivered out of order. A message-based ratchet would require strict ordering and real-time coordination that is not possible with email.
 
@@ -65,7 +65,7 @@ The primary key uses Ed25519 (a signing algorithm) because:
 - **Wide support**: Ed25519 is supported by virtually all modern cryptographic libraries.
 - **Not encryption**: The primary key only signs and certifies. It does not encrypt. Quantum computers threaten encryption more than signing in the short term.
 
-> **Note**: The reference implementation uses **Ed448** (which provides higher security margins), but the specification supports Ed25519 as well for wider compatibility.
+> **Note**: The reference implementations may use **Ed448** (which provides higher security margins), but the specification defines Ed25519 as the standard algorithm for wider compatibility.
 
 ## Why Seed-Free Ratcheting?
 
@@ -97,7 +97,7 @@ When a new rotating subkey is created, the old one remains valid for a period (t
 - Network delays in distributing updated certificates do not cause failures.
 - No messages are lost during key transitions.
 
-**Trade-off:** The overlap period slightly reduces forward secrecy, because the old key material is retained for longer. The default 50% overlap (30 days of overlap in a 60-day rotation) is a practical compromise.
+**Trade-off:** The overlap period slightly reduces forward secrecy, because the old key material is retained for longer. The default 50% overlap (5 days of overlap in a 10-day rotation) is a practical compromise.
 
 ## Why SEIPDv2 (AEAD)?
 
@@ -126,8 +126,8 @@ An Autocrypt v2 certificate does not contain any explicit label saying "I am Aut
 
 | Parameter | Value | Reasoning |
 |-----------|-------|-----------|
-| **max_rd** | 5,242,880 seconds (~60 days) | Long enough for delayed email delivery, short enough for meaningful forward secrecy |
-| **min_rd** | max_rd / 2 (~30 days) | 50% overlap provides robust key transition |
+| **max_rd** | 864,000 seconds (~10 days) | Long enough for delayed email delivery, short enough for meaningful forward secrecy |
+| **min_rd** | max_rd / 2 = 432,000 seconds (~5 days) | 50% overlap provides robust key transition |
 | **HKDF output** | 160 bytes | 64 bytes for signature salt derivation + 96 bytes for new key material |
 | **Signature hash** | SHA-512 | Widely supported, provides 256-bit security |
 | **Key derivation** | HKDF-SHA512 | Standard (RFC 5869), sufficient output length |

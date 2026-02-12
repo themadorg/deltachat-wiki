@@ -25,8 +25,8 @@ Key rotation is controlled by two time periods:
 
 | Parameter | Name | Default | Meaning |
 |-----------|------|---------|---------|
-| **max_rd** | Maximum Rotation Duration | ~60 days (5,242,880 seconds) | How long a rotating subkey is valid for. |
-| **min_rd** | Minimum Rotation Duration | Half of max_rd (~30 days) | How soon a new key is created before the old one expires. |
+| **max_rd** | Maximum Rotation Duration | 10 days (864000 seconds) | How long a rotating subkey is valid for. |
+| **min_rd** | Minimum Rotation Duration | Half of max_rd = 5 days (432000 seconds) | How soon a new key is created before the old one expires. |
 
 The overlap between `min_rd` and `max_rd` ensures there is always a valid key available:
 
@@ -143,7 +143,7 @@ Here is the process step by step:
 4. **Run HKDF-SHA512**: Expand the IKM to 160 bytes of output (`ks`).
 
 5. **Split the output**:
-   - `ks[0:64]` → used to generate the **binding signature salt** (`bssalt = SHA512(ks[0:64])[0:32]`).
+   - `ks[0:64]` → used to generate the **binding signature salt** (`bssalt = SHA512(ks[0:64])[0:16]`).
    - `ks[64:160]` → the **new secret key material** (96 bytes), which is then normalized (X25519 clamped).
 
 6. **Create the new subkey**: Use `ks[64:160]` to create a new ML-KEM-768+X25519 secret subkey.
@@ -160,7 +160,7 @@ Here is the process step by step:
 
 ## When to Ratchet
 
-A device (called a UMA — User-Managed Agent) should create a new rotating subkey when:
+A device (called a UMA — User Messaging Agent) should create a new rotating subkey when:
 
 1. The current time (`now`) is past `base_start + max_rd - min_rd`, where `base_start` is the creation time of the current rotating subkey.
 2. In simpler terms: ratchet when the current key has been active for at least half its lifetime.

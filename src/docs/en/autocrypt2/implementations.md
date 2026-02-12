@@ -30,7 +30,7 @@ The Rust code is organized into these modules:
 #### `create_autocrypt_v2_cert()`
 
 Creates a new Autocrypt v2 certificate with:
-- An Ed25519 primary key (Ed448 in the implementation).
+- An Ed25519 primary key (the reference Rust implementation uses Ed448 for higher security margins).
 - An ML-KEM-768+X25519 fallback subkey (no expiration).
 - An ML-KEM-768+X25519 rotating subkey (with expiration).
 
@@ -50,7 +50,7 @@ Derives the next rotating subkey from the current one:
 use autocrypt_v2_cert::ac2_ratchet;
 use std::time::Duration;
 
-let rotation_period = Duration::from_secs(60 * 24 * 60 * 60); // 60 days
+let rotation_period = Duration::from_secs(864000); // 10 days (spec default)
 let new_subkey = ac2_ratchet(
     &primary_key,
     &current_rotating_subkey,
@@ -90,7 +90,7 @@ The `CertParams` struct controls certificate creation:
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `creation_time` | Current time | When the certificate was created |
-| `rotation_period` | 5,242,880 seconds (~60 days) | How long each rotating subkey is valid |
+| `rotation_period` | 864,000 seconds (~10 days, spec default) | How long each rotating subkey is valid |
 | `primary_key_material` | Random | Optional: fixed primary key for test vectors |
 | `fallback_subkey_material` | Random | Optional: fixed fallback key for test vectors |
 | `rotating_subkey_material` | Random | Optional: fixed rotating key for test vectors |
@@ -129,7 +129,7 @@ The Python script uses these fixed values:
 | Parameter | Value |
 |-----------|-------|
 | **Creation time** | `2025-11-01T17:33:45Z` |
-| **Rotation period** | `5,242,880 seconds` (1024 × 1024 × 5) |
+| **Rotation period** | `5,242,880 seconds` (used for test vectors; spec default is 864,000 seconds = 10 days) |
 | **Overlap** | `0.5` (50% overlap between consecutive keys) |
 
 ### How Test Vectors Work
@@ -182,11 +182,11 @@ Total: 6 packets
 ```
 
 The tests also verify:
-- Primary key uses Ed448 algorithm.
+- Primary key uses Ed448 algorithm (the reference implementation choice; the spec defines Ed25519 as the standard).
 - Both subkeys use ML-KEM-768+X25519.
 - All keys are OpenPGP v6.
 - Fallback subkey has Encrypt Storage + Encrypt Communications flags.
 - Rotating subkey has Encrypt Communications only.
 - SEIPDv2 feature is enabled.
-- Public certificate is approximately 3,164 bytes.
+- Public certificate is approximately 2,938 bytes in binary form (larger if using Ed448 as in the reference implementation).
 - Ratcheting is deterministic (same inputs → same outputs).

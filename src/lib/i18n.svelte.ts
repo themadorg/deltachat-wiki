@@ -12,12 +12,12 @@ const translationMap: Record<string, any> = { en, fa, ru, es };
 type SupportedLangCode = (typeof supportedLangCodes)[number];
 
 export class I18n {
-    lang = $state('fa');
+    lang = $state('en');
     translations = $derived(translationMap[this.lang] || translationMap.en);
     dir = $derived(supportedLanguages.find(l => l.code === this.lang)?.dir || 'ltr');
 
     constructor(initialLang: string) {
-        this.lang = supportedLangCodes.includes(initialLang as any) ? initialLang : 'fa';
+        this.lang = supportedLangCodes.includes(initialLang as any) ? initialLang : 'en';
     }
 
     /**

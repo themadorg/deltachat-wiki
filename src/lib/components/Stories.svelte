@@ -214,13 +214,6 @@
 		touch-action: none;
 	}
 
-	/* Only show on mobile */
-	@media (min-width: 768px) {
-		.stories-overlay {
-			display: none;
-		}
-	}
-
 	.story-container {
 		position: relative;
 		width: 100%;

@@ -14,7 +14,7 @@
 <div class="pages-layout">
     <nav class="top-nav">
         <div class="nav-content">
-            <a href="/" class="logo">
+            <a href="/{i18n.lang}" class="logo">
                 <span class="icon">
                     <Logo size={32} class="page-header-logo-img" />
                 </span>
@@ -22,7 +22,9 @@
             </a>
             <div class="nav-right">
                 <div class="links">
-                    <a href="/" class:active={page.url.pathname === "/"}
+                    <a
+                        href="/{i18n.lang}"
+                        class:active={page.url.pathname === `/${i18n.lang}`}
                         >{i18n.t("nav_home")}</a
                     >
                 </div>

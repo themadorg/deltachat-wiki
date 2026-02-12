@@ -14,7 +14,7 @@ This page compares Autocrypt v2 with other end-to-end encryption systems.
 | Feature | Autocrypt v2 | Signal | Traditional PGP | Autocrypt v1 |
 |---------|-------------|--------|-----------------|-------------|
 | **Post-Quantum** | ✅ ML-KEM-768+X25519 | ❌ X25519 only | ❌ RSA/ECDH | ❌ RSA/Curve25519 |
-| **Forward Secrecy** | ✅ ~30-60 days | ✅ Per-message | ❌ None | ❌ None |
+| **Forward Secrecy** | ✅ ~5-10 days | ✅ Per-message | ❌ None | ❌ None |
 | **Works Offline** | ✅ Fully | ⚠️ Needs initial setup | ✅ Fully | ✅ Fully |
 | **Multi-Device** | ✅ No coordination | ⚠️ Requires sync | ✅ Manual | ✅ Manual |
 | **Key Rotation** | ✅ Automatic | ✅ Per-message | ❌ Manual | ❌ Manual |
@@ -25,7 +25,7 @@ This page compares Autocrypt v2 with other end-to-end encryption systems.
 
 Signal's Double Ratchet is the gold standard for real-time chat encryption. Autocrypt v2 is designed for email.
 
-**Forward Secrecy**: Signal ratchets on every message. Autocrypt v2 ratchets every ~30 days. Signal provides finer-grained protection but requires real-time interaction.
+**Forward Secrecy**: Signal ratchets on every message. Autocrypt v2 ratchets every ~5 days. Signal provides finer-grained protection but requires real-time interaction.
 
 **Network**: Signal needs both parties online for the first message (X3DH). Autocrypt v2 works fully offline — essential for email where messages can be delayed for days.
 
@@ -43,7 +43,7 @@ Signal's Double Ratchet is the gold standard for real-time chat encryption. Auto
 
 ## Autocrypt v2 vs. Traditional PGP
 
-**Key Rotation**: Traditional PGP users must manually generate and distribute new keys. Most never do. Autocrypt v2 rotates keys automatically every ~30 days.
+**Key Rotation**: Traditional PGP users must manually generate and distribute new keys. Most never do. Autocrypt v2 rotates keys automatically every ~5 days.
 
 **Forward Secrecy**: Traditional PGP has none. If your key is compromised, all past messages are exposed. Autocrypt v2 destroys old keys.
 
@@ -61,7 +61,7 @@ Signal's Double Ratchet is the gold standard for real-time chat encryption. Auto
 | **Encryption key** | RSA-2048 or Curve25519 | ML-KEM-768+X25519 |
 | **OpenPGP version** | v4 | v6 |
 | **Message encryption** | SEIPD v1 (MDC) | SEIPD v2 (AEAD) |
-| **Key rotation** | None | Automatic (~30 days) |
+| **Key rotation** | None | Automatic (~5 days) |
 | **Forward secrecy** | None | Yes |
 | **User IDs** | Yes | None |
 

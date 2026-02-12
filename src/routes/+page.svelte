@@ -10,13 +10,13 @@
             browserLang,
         )
             ? browserLang
-            : "fa";
+            : "en";
         goto(`/${lang}`, { replaceState: true });
     });
 </script>
 
 <svelte:head>
-    <meta http-equiv="refresh" content="0; url=/fa" />
+    <meta http-equiv="refresh" content="0; url=/en" />
     <title>Delta Chat Guide - Redirecting...</title>
 </svelte:head>
 

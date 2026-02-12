@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/themadorg/deltachat-wiki/compare/v1.3.5...v1.3.6) (2026-02-12)
+
+
+### Bug Fixes
+
+* reload issue ([35264c0](https://github.com/themadorg/deltachat-wiki/commit/35264c049ca290dad231c5f4eeb5aea776802052))
+
 ## [1.3.5](https://github.com/themadorg/deltachat-wiki/compare/v1.3.4...v1.3.5) (2026-02-12)
 
 

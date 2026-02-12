@@ -31,10 +31,42 @@
         const MSG_RADIUS = 2;
         const MAX_MSGS = [25, 40, 60][perfTier];
 
-        // Colors
-        const SERVER_COLOR: [number, number, number] = [99, 102, 241]; // indigo
-        const USER_COLOR: [number, number, number] = [148, 163, 184]; // slate
-        const MSG_COLOR: [number, number, number] = [34, 197, 94]; // green
+        // Colors — theme-aware
+        function getTheme(): string {
+            return (
+                document.documentElement.getAttribute("data-theme") || "dark"
+            );
+        }
+        let currentTheme = getTheme();
+
+        function colors() {
+            if (currentTheme === "light") {
+                return {
+                    server: [148, 163, 184] as [number, number, number], // slate-400 gray
+                    user: [255, 0, 0] as [number, number, number], // 🔴 قرمز جیغ
+                    msg: [5, 150, 105] as [number, number, number], // emerald-600
+                };
+            }
+            return {
+                server: [99, 102, 241] as [number, number, number], // indigo
+                user: [148, 163, 184] as [number, number, number], // slate
+                msg: [34, 197, 94] as [number, number, number], // green
+            };
+        }
+        let clr = colors();
+
+        // Watch for theme changes
+        const themeObserver = new MutationObserver(() => {
+            const newTheme = getTheme();
+            if (newTheme !== currentTheme) {
+                currentTheme = newTheme;
+                clr = colors();
+            }
+        });
+        themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+        });
 
         // --- State ---
         type NodeType = "server" | "user";
@@ -103,9 +135,9 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            const [sr, sg, sb] = SERVER_COLOR;
-            const [ur, ug, ub] = USER_COLOR;
-            const [mr, mg, mb] = MSG_COLOR;
+            const [sr, sg, sb] = clr.server;
+            const [ur, ug, ub] = clr.user;
+            const [mr, mg, mb] = clr.msg;
 
             // Update positions
             for (const n of nodes) {
@@ -179,16 +211,25 @@
                 const x = from.x + (to.x - from.x) * m.t;
                 const y = from.y + (to.y - from.y) * m.t;
 
-                // Glow
-                const glowSize = MSG_RADIUS * 5;
-                const glow = ctx!.createRadialGradient(x, y, 0, x, y, glowSize);
-                glow.addColorStop(0, `rgba(${mr},${mg},${mb},0.5)`);
-                glow.addColorStop(0.5, `rgba(${mr},${mg},${mb},0.1)`);
-                glow.addColorStop(1, `rgba(${mr},${mg},${mb},0)`);
-                ctx!.beginPath();
-                ctx!.arc(x, y, glowSize, 0, Math.PI * 2);
-                ctx!.fillStyle = glow;
-                ctx!.fill();
+                // Glow (only in dark mode)
+                if (currentTheme !== "light") {
+                    const glowSize = MSG_RADIUS * 5;
+                    const glow = ctx!.createRadialGradient(
+                        x,
+                        y,
+                        0,
+                        x,
+                        y,
+                        glowSize,
+                    );
+                    glow.addColorStop(0, `rgba(${mr},${mg},${mb},0.5)`);
+                    glow.addColorStop(0.5, `rgba(${mr},${mg},${mb},0.1)`);
+                    glow.addColorStop(1, `rgba(${mr},${mg},${mb},0)`);
+                    ctx!.beginPath();
+                    ctx!.arc(x, y, glowSize, 0, Math.PI * 2);
+                    ctx!.fillStyle = glow;
+                    ctx!.fill();
+                }
 
                 // Core
                 ctx!.beginPath();
@@ -203,31 +244,33 @@
             for (const n of nodes) {
                 const isServer = n.type === "server";
                 const baseR = isServer ? SERVER_RADIUS : USER_RADIUS;
-                const [cr, cg, cb] = isServer ? SERVER_COLOR : USER_COLOR;
+                const [cr, cg, cb] = isServer ? clr.server : clr.user;
                 const pulseScale =
                     1 + Math.sin(n.pulse) * (isServer ? 0.1 : 0.08);
                 const r = baseR * pulseScale;
 
-                // Glow
-                const glowSize = r * (isServer ? 5 : 3);
-                const glow = ctx.createRadialGradient(
-                    n.x,
-                    n.y,
-                    0,
-                    n.x,
-                    n.y,
-                    glowSize,
-                );
-                glow.addColorStop(
-                    0,
-                    `rgba(${cr},${cg},${cb},${isServer ? 0.35 : 0.2})`,
-                );
-                glow.addColorStop(0.4, `rgba(${cr},${cg},${cb},0.06)`);
-                glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, glowSize, 0, Math.PI * 2);
-                ctx.fillStyle = glow;
-                ctx.fill();
+                // Glow (only in dark mode)
+                if (currentTheme !== "light") {
+                    const glowSize = r * (isServer ? 5 : 3);
+                    const glow = ctx.createRadialGradient(
+                        n.x,
+                        n.y,
+                        0,
+                        n.x,
+                        n.y,
+                        glowSize,
+                    );
+                    glow.addColorStop(
+                        0,
+                        `rgba(${cr},${cg},${cb},${isServer ? 0.35 : 0.2})`,
+                    );
+                    glow.addColorStop(0.4, `rgba(${cr},${cg},${cb},0.06)`);
+                    glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, glowSize, 0, Math.PI * 2);
+                    ctx.fillStyle = glow;
+                    ctx.fill();
+                }
 
                 // Core
                 ctx.beginPath();
@@ -253,6 +296,7 @@
         return () => {
             cancelAnimationFrame(animId);
             window.removeEventListener("resize", onResize);
+            themeObserver.disconnect();
         };
     });
 </script>

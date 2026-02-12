@@ -116,7 +116,7 @@
 					href="/{data.lang}/docs/general/introduction"
 					class="outline-btn"
 				>
-					View All Documentation
+					{i18n.t("view_all_docs")}
 				</a>
 			</div>
 		</section>

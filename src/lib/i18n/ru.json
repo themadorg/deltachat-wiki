@@ -24,6 +24,7 @@
     "sidebar_title": "Разделы",
     "doc_home": "Главная",
     "doc_title": "Документация",
+    "view_all_docs": "Смотреть всю документацию",
     "toc_title": "На этой странице",
     "nav_download": "Скачать",
     "search_placeholder": "Поиск...",
@@ -101,5 +102,6 @@
     "error_not_found": "Страница не найдена",
     "error_occurred": "Произошла ошибка",
     "error_back_to_docs": "Вернуться к документации",
-    "error_home": "Главная"
+    "error_home": "Главная",
+    "footer_license": "Лицензия GNU GPLv3 (Copyleft). Свободно для использования и распространения."
 }

@@ -24,6 +24,7 @@
     "sidebar_title": "Capítulos",
     "doc_home": "Inicio",
     "doc_title": "Documentación",
+    "view_all_docs": "Ver toda la documentación",
     "toc_title": "En esta página",
     "nav_download": "Descargar",
     "search_placeholder": "Buscar...",
@@ -101,5 +102,6 @@
     "error_not_found": "Página no encontrada",
     "error_occurred": "Ha ocurrido un error",
     "error_back_to_docs": "Volver a Documentación",
-    "error_home": "Inicio"
+    "error_home": "Inicio",
+    "footer_license": "Licenciado bajo GNU GPLv3 (Copyleft). Libre para usar y compartir."
 }

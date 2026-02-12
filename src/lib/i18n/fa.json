@@ -24,6 +24,7 @@
     "sidebar_title": "سرفصل‌ها",
     "doc_home": "خانه",
     "doc_title": "مستندات",
+    "view_all_docs": "مشاهده همه مستندات",
     "toc_title": "در این صفحه",
     "nav_download": "دانلود",
     "search_placeholder": "جستجو...",
@@ -88,5 +89,6 @@
     "error_not_found": "صفحه مورد نظر پیدا نشد",
     "error_occurred": "خطایی رخ داده است",
     "error_back_to_docs": "بازگشت به مستندات",
-    "error_home": "صفحه اصلی"
+    "error_home": "صفحه اصلی",
+    "footer_license": "تحت مجوز GNU GPLv3 (کپی‌لفت). استفاده و اشتراک‌گذاری آزاد."
 }

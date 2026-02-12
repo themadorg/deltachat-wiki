@@ -1,3 +1,11 @@
+## [1.3.5](https://github.com/themadorg/deltachat-wiki/compare/v1.3.4...v1.3.5) (2026-02-12)
+
+
+### Bug Fixes
+
+* front page design ([6ec90ee](https://github.com/themadorg/deltachat-wiki/commit/6ec90eea249d67c2b18fc02a2b2f7ed7527b2460))
+* main page ([19e0f7f](https://github.com/themadorg/deltachat-wiki/commit/19e0f7f26dcb194f8eed09fb61981277ecf262dd))
+
 ## [1.3.4](https://github.com/themadorg/deltachat-wiki/compare/v1.3.3...v1.3.4) (2026-02-12)
 
 

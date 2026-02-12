@@ -1,139 +1,279 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { browser } from "$app/environment";
 
-    let { class: className = "" } = $props<{ class?: string }>();
-
-    let dots = $state<{ x: number; y: number; id: number }[]>([]);
-    let paths = $state<{ from: number; to: number; id: number }[]>([]);
-    let messages = $state<{ pathId: number; progress: number; id: number }[]>(
-        [],
-    );
-
-    let nextId = 0;
+    let canvas: HTMLCanvasElement;
 
     onMount(() => {
-        // Generate random dots (nodes)
-        for (let i = 0; i < 15; i++) {
-            dots.push({
-                x: Math.random() * 100,
-                y: Math.random() * 100,
-                id: nextId++,
-            });
+        if (!browser) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        let w = 0;
+        let h = 0;
+        let animId = 0;
+        let dpr = window.devicePixelRatio || 1;
+
+        // --- Config (adaptive based on device) ---
+        const cores = navigator.hardwareConcurrency || 4;
+        const perfTier = cores >= 8 ? 2 : cores >= 4 ? 1 : 0; // high, mid, low
+
+        const SERVER_COUNT = [6, 8, 12][perfTier];
+        const USER_COUNT = [20, 30, 45][perfTier];
+        const MAX_DIST_SERVER = 300;
+        const MAX_DIST_USER = 180;
+        const MSG_SPEED = 0.004;
+        const MSG_SPAWN_RATE = 0.005;
+
+        const SERVER_RADIUS = 6;
+        const USER_RADIUS = 2.5;
+        const MSG_RADIUS = 2;
+        const MAX_MSGS = [25, 40, 60][perfTier];
+
+        // Colors
+        const SERVER_COLOR: [number, number, number] = [99, 102, 241]; // indigo
+        const USER_COLOR: [number, number, number] = [148, 163, 184]; // slate
+        const MSG_COLOR: [number, number, number] = [34, 197, 94]; // green
+
+        // --- State ---
+        type NodeType = "server" | "user";
+
+        interface Node {
+            x: number;
+            y: number;
+            vx: number;
+            vy: number;
+            pulse: number;
+            type: NodeType;
         }
 
-        // Connect dots with paths
-        for (let i = 0; i < dots.length; i++) {
-            const connections = Math.floor(Math.random() * 2) + 1;
-            for (let j = 0; j < connections; j++) {
-                const targetIdx = Math.floor(Math.random() * dots.length);
-                if (targetIdx !== i) {
-                    paths.push({
-                        from: dots[i].id,
-                        to: dots[targetIdx].id,
-                        id: nextId++,
-                    });
+        interface Msg {
+            fromIdx: number;
+            toIdx: number;
+            t: number;
+        }
+
+        let nodes: Node[] = [];
+        let msgs: Msg[] = [];
+
+        function resize() {
+            w = window.innerWidth;
+            // Use the hero section height (grandparent of canvas)
+            const hero = canvas.closest(".hero");
+            h = hero ? hero.getBoundingClientRect().height : window.innerHeight;
+            dpr = window.devicePixelRatio || 1;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+            ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function initNodes() {
+            nodes = [];
+            const pad = 40;
+
+            // Servers — spread out more evenly
+            for (let i = 0; i < SERVER_COUNT; i++) {
+                nodes.push({
+                    x: pad + Math.random() * (w - pad * 2),
+                    y: pad + Math.random() * (h - pad * 2),
+                    vx: 0,
+                    vy: 0,
+                    pulse: Math.random() * Math.PI * 2,
+                    type: "server",
+                });
+            }
+
+            // Users — scattered around
+            for (let i = 0; i < USER_COUNT; i++) {
+                nodes.push({
+                    x: pad + Math.random() * (w - pad * 2),
+                    y: pad + Math.random() * (h - pad * 2),
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    pulse: Math.random() * Math.PI * 2,
+                    type: "user",
+                });
+            }
+        }
+
+        function draw() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const [sr, sg, sb] = SERVER_COLOR;
+            const [ur, ug, ub] = USER_COLOR;
+            const [mr, mg, mb] = MSG_COLOR;
+
+            // Update positions
+            for (const n of nodes) {
+                n.x += n.vx;
+                n.y += n.vy;
+                n.pulse += 0.015;
+
+                if (n.x < 10 || n.x > w - 10) n.vx *= -1;
+                if (n.y < 10 || n.y > h - 10) n.vy *= -1;
+                n.x = Math.max(5, Math.min(w - 5, n.x));
+                n.y = Math.max(5, Math.min(h - 5, n.y));
+            }
+
+            // Build edges
+            const edges: [number, number][] = [];
+
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const ni = nodes[i];
+                    const nj = nodes[j];
+                    const dx = ni.x - nj.x;
+                    const dy = ni.y - nj.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    // Determine max distance based on node types
+                    let maxDist = MAX_DIST_USER;
+                    if (ni.type === "server" && nj.type === "server") {
+                        maxDist = MAX_DIST_SERVER;
+                    } else if (ni.type === "server" || nj.type === "server") {
+                        maxDist = MAX_DIST_USER;
+                    } else {
+                        // user-to-user: no direct connection
+                        continue;
+                    }
+
+                    if (dist < maxDist) {
+                        const alpha = (1 - dist / maxDist) * 0.18;
+                        // Use server color for lines
+                        ctx.beginPath();
+                        ctx.moveTo(ni.x, ni.y);
+                        ctx.lineTo(nj.x, nj.y);
+                        ctx.strokeStyle = `rgba(${sr},${sg},${sb},${alpha})`;
+                        ctx.lineWidth =
+                            ni.type === "server" && nj.type === "server"
+                                ? 1.2
+                                : 0.7;
+                        ctx.stroke();
+                        edges.push([i, j]);
+                    }
                 }
             }
+
+            // Spawn messages
+            for (const [a, b] of edges) {
+                if (Math.random() < MSG_SPAWN_RATE && msgs.length < MAX_MSGS) {
+                    if (Math.random() > 0.5) {
+                        msgs.push({ fromIdx: a, toIdx: b, t: 0 });
+                    } else {
+                        msgs.push({ fromIdx: b, toIdx: a, t: 0 });
+                    }
+                }
+            }
+
+            // Draw & update messages (green)
+            msgs = msgs.filter((m) => {
+                m.t += MSG_SPEED;
+                if (m.t > 1) return false;
+
+                const from = nodes[m.fromIdx];
+                const to = nodes[m.toIdx];
+                const x = from.x + (to.x - from.x) * m.t;
+                const y = from.y + (to.y - from.y) * m.t;
+
+                // Glow
+                const glowSize = MSG_RADIUS * 5;
+                const glow = ctx!.createRadialGradient(x, y, 0, x, y, glowSize);
+                glow.addColorStop(0, `rgba(${mr},${mg},${mb},0.5)`);
+                glow.addColorStop(0.5, `rgba(${mr},${mg},${mb},0.1)`);
+                glow.addColorStop(1, `rgba(${mr},${mg},${mb},0)`);
+                ctx!.beginPath();
+                ctx!.arc(x, y, glowSize, 0, Math.PI * 2);
+                ctx!.fillStyle = glow;
+                ctx!.fill();
+
+                // Core
+                ctx!.beginPath();
+                ctx!.arc(x, y, MSG_RADIUS, 0, Math.PI * 2);
+                ctx!.fillStyle = `rgba(${mr},${mg},${mb},0.9)`;
+                ctx!.fill();
+
+                return true;
+            });
+
+            // Draw nodes
+            for (const n of nodes) {
+                const isServer = n.type === "server";
+                const baseR = isServer ? SERVER_RADIUS : USER_RADIUS;
+                const [cr, cg, cb] = isServer ? SERVER_COLOR : USER_COLOR;
+                const pulseScale =
+                    1 + Math.sin(n.pulse) * (isServer ? 0.1 : 0.08);
+                const r = baseR * pulseScale;
+
+                // Glow
+                const glowSize = r * (isServer ? 5 : 3);
+                const glow = ctx.createRadialGradient(
+                    n.x,
+                    n.y,
+                    0,
+                    n.x,
+                    n.y,
+                    glowSize,
+                );
+                glow.addColorStop(
+                    0,
+                    `rgba(${cr},${cg},${cb},${isServer ? 0.35 : 0.2})`,
+                );
+                glow.addColorStop(0.4, `rgba(${cr},${cg},${cb},0.06)`);
+                glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, glowSize, 0, Math.PI * 2);
+                ctx.fillStyle = glow;
+                ctx.fill();
+
+                // Core
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${cr},${cg},${cb},${isServer ? 0.7 : 0.45})`;
+                ctx.fill();
+            }
+
+            animId = requestAnimationFrame(draw);
         }
 
-        const interval = setInterval(() => {
-            if (messages.length < 8) {
-                const pathIdx = Math.floor(Math.random() * paths.length);
-                messages = [
-                    ...messages,
-                    { pathId: pathIdx, progress: 0, id: nextId++ },
-                ];
-            }
-        }, 800);
+        resize();
+        initNodes();
+        animId = requestAnimationFrame(draw);
 
-        let lastTime = 0;
-        const animate = (time: number) => {
-            const dt = (time - lastTime) / 1000;
-            lastTime = time;
-
-            messages = messages
-                .map((m) => ({ ...m, progress: m.progress + dt * 0.4 }))
-                .filter((m) => m.progress < 1);
-
-            requestAnimationFrame(animate);
+        const onResize = () => {
+            resize();
+            initNodes();
+            msgs = [];
         };
-        const animId = requestAnimationFrame(animate);
+        window.addEventListener("resize", onResize);
 
         return () => {
-            clearInterval(interval);
             cancelAnimationFrame(animId);
+            window.removeEventListener("resize", onResize);
         };
     });
-
-    function getCoord(id: number) {
-        const dot = dots.find((d) => d.id === id);
-        return dot ? { x: dot.x, y: dot.y } : { x: 0, y: 0 };
-    }
 </script>
 
-<div class="animation-container {className}">
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-        <!-- Paths -->
-        {#each paths as path (path.id)}
-            {@const from = getCoord(path.from)}
-            {@const to = getCoord(path.to)}
-            <line
-                x1={from.x}
-                y1={from.y}
-                x2={to.x}
-                y2={to.y}
-                class="path-line"
-            />
-        {/each}
-
-        <!-- Messages -->
-        {#each messages as msg (msg.id)}
-            {@const path = paths[msg.pathId]}
-            {@const from = getCoord(path.from)}
-            {@const to = getCoord(path.to)}
-            {@const x = from.x + (to.x - from.x) * msg.progress}
-            {@const y = from.y + (to.y - from.y) * msg.progress}
-            <circle cx={x} cy={y} r="0.8" class="message-dot" />
-        {/each}
-
-        <!-- Nodes -->
-        {#each dots as dot (dot.id)}
-            <circle cx={dot.x} cy={dot.y} r="1.5" class="node-dot" />
-        {/each}
-    </svg>
+<div class="hero-canvas-wrap">
+    <canvas bind:this={canvas}></canvas>
 </div>
 
 <style>
-    .animation-container {
-        width: 100%;
-        height: 100%;
+    .hero-canvas-wrap {
         position: absolute;
-        top: 0;
-        left: 0;
+        inset: 0;
         overflow: hidden;
-        opacity: 0.4;
-        z-index: -1;
+        opacity: 0.5;
+        z-index: 0;
         pointer-events: none;
     }
 
-    svg {
+    canvas {
+        display: block;
         width: 100%;
         height: 100%;
-    }
-
-    .path-line {
-        stroke: var(--primary);
-        stroke-width: 0.1;
-        stroke-opacity: 0.3;
-    }
-
-    .node-dot {
-        fill: var(--primary);
-        opacity: 0.4;
-    }
-
-    .message-dot {
-        fill: var(--primary);
-        filter: drop-shadow(0 0 3px var(--primary));
     }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { onMount } from "svelte";
     import { getI18n } from "$lib/i18n.svelte";
     import { theme } from "$lib/theme.svelte";
     import { Languages, Sun, Moon } from "@lucide/svelte";
@@ -9,10 +10,19 @@
     let { children } = $props();
     const i18n = getI18n();
     let showLangModal = $state(false);
+    let scrolled = $state(false);
+
+    onMount(() => {
+        const onScroll = () => {
+            scrolled = window.scrollY > 50;
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    });
 </script>
 
 <div class="pages-layout">
-    <nav class="top-nav">
+    <nav class="top-nav" class:scrolled>
         <div class="nav-content">
             <a href="/{i18n.lang}" class="logo">
                 <span class="icon">
@@ -70,21 +80,31 @@
     }
 
     .top-nav {
-        background: rgba(15, 23, 42, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: 1px solid transparent;
         position: sticky;
         top: 0;
         z-index: 50;
         height: 64px;
         display: flex;
         align-items: center;
-        transition: all 0.3s ease;
+        transition:
+            background 0.4s ease,
+            border-bottom 0.4s ease,
+            backdrop-filter 0.4s ease;
     }
 
-    :global([data-theme="light"]) .top-nav {
-        background: rgba(255, 255, 255, 0.8);
+    .top-nav.scrolled {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    :global([data-theme="light"]) .top-nav.scrolled {
+        background: rgba(255, 255, 255, 0.7);
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 

@@ -29,7 +29,7 @@
 
 :root {
   --bg: #0b101b;
-  --bg-surface: rgba(11, 16, 27, 0.8);
+  --bg-surface: #0d1220;
   --bg-sidebar: #0b101b;
   --border: rgba(255, 255, 255, 0.05);
   --text: #ffffff;
@@ -47,7 +47,7 @@
 
 [data-theme="light"] {
   --bg: #ffffff;
-  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-surface: #f8fafc;
   --bg-sidebar: #f8fafc;
   --border: rgba(0, 0, 0, 0.08);
   --text: #0b101b;

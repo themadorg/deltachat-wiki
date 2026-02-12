@@ -35,9 +35,12 @@
 	<Stories onFinish={closeStories} />
 {/if}
 
+<div class="hero-bg">
+	<HeroAnimation />
+</div>
+
 <div class="landing-page">
 	<header class="hero">
-		<HeroAnimation />
 		<div class="hero-content">
 			<div class="hero-badge">
 				<Sparkles size={14} class="sparkle-icon" />
@@ -62,66 +65,83 @@
 		</div>
 	</header>
 
-	<section class="features-grid">
-		<div class="feature-card">
-			<div class="icon-box"><Share2 /></div>
-			<h3>{i18n.t("feature_decentralized_title")}</h3>
-			<p>{i18n.t("feature_decentralized_desc")}</p>
-		</div>
-		<div class="feature-card">
-			<div class="icon-box"><Shield /></div>
-			<h3>{i18n.t("feature_encryption_title")}</h3>
-			<p>{i18n.t("feature_encryption_desc")}</p>
-		</div>
-		<div class="feature-card">
-			<div class="icon-box"><Globe /></div>
-			<h3>{i18n.t("feature_universal_title")}</h3>
-			<p>{i18n.t("feature_universal_desc")}</p>
-		</div>
-		<div class="feature-card">
-			<div class="icon-box"><Box /></div>
-			<h3>{i18n.t("feature_webxdc_title")}</h3>
-			<p>{i18n.t("feature_webxdc_desc")}</p>
-		</div>
-	</section>
+	<div class="below-hero">
+		<section class="features-grid">
+			<div class="feature-card">
+				<div class="icon-box"><Share2 /></div>
+				<h3>{i18n.t("feature_decentralized_title")}</h3>
+				<p>{i18n.t("feature_decentralized_desc")}</p>
+			</div>
+			<div class="feature-card">
+				<div class="icon-box"><Shield /></div>
+				<h3>{i18n.t("feature_encryption_title")}</h3>
+				<p>{i18n.t("feature_encryption_desc")}</p>
+			</div>
+			<div class="feature-card">
+				<div class="icon-box"><Globe /></div>
+				<h3>{i18n.t("feature_universal_title")}</h3>
+				<p>{i18n.t("feature_universal_desc")}</p>
+			</div>
+			<div class="feature-card">
+				<div class="icon-box"><Box /></div>
+				<h3>{i18n.t("feature_webxdc_title")}</h3>
+				<p>{i18n.t("feature_webxdc_desc")}</p>
+			</div>
+		</section>
 
-	<section class="docs-section">
-		<div class="section-header">
-			<h2>{i18n.t("doc_title")}</h2>
-			<p>{i18n.t("why_content")}</p>
-		</div>
+		<section class="docs-section">
+			<div class="section-header">
+				<h2>{i18n.t("doc_title")}</h2>
+				<p>{i18n.t("why_content")}</p>
+			</div>
 
-		<div class="docs-grid">
-			{#each displayDocs.slice(0, 6) as doc}
-				<a href="/{data.lang}/docs/{doc.slug}" class="doc-card">
-					<div class="card-content">
-						<h3>{doc.meta?.title || doc.slug}</h3>
-						<p>{doc.meta?.description || i18n.t("read_more")}</p>
-					</div>
-					<div class="card-footer">
-						<span class="read-more">{i18n.t("read_more")}</span>
-					</div>
+			<div class="docs-grid">
+				{#each displayDocs.slice(0, 6) as doc}
+					<a href="/{data.lang}/docs/{doc.slug}" class="doc-card">
+						<div class="card-content">
+							<h3>{doc.meta?.title || doc.slug}</h3>
+							<p>
+								{doc.meta?.description || i18n.t("read_more")}
+							</p>
+						</div>
+						<div class="card-footer">
+							<span class="read-more">{i18n.t("read_more")}</span>
+						</div>
+					</a>
+				{/each}
+			</div>
+
+			<div class="all-docs-btn-container">
+				<a
+					href="/{data.lang}/docs/general/introduction"
+					class="outline-btn"
+				>
+					View All Documentation
 				</a>
-			{/each}
-		</div>
-
-		<div class="all-docs-btn-container">
-			<a
-				href="/{data.lang}/docs/general/introduction"
-				class="outline-btn"
-			>
-				View All Documentation
-			</a>
-		</div>
-	</section>
+			</div>
+		</section>
+	</div>
 </div>
 
 <style>
+	.hero-bg {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		z-index: 0;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
 	.landing-page {
 		max-width: 1400px;
 		margin: 0 auto;
 		padding: 0 2rem 8rem;
 		overflow-x: hidden;
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero {
@@ -132,7 +152,18 @@
 		justify-content: center;
 		text-align: center;
 		position: relative;
-		margin-bottom: 4rem;
+		margin-bottom: 0;
+	}
+
+	.below-hero {
+		background: var(--bg);
+		position: relative;
+		z-index: 2;
+		padding-top: 4rem;
+		margin-left: calc(-50vw + 50%);
+		margin-right: calc(-50vw + 50%);
+		padding-left: calc(50vw - 50%);
+		padding-right: calc(50vw - 50%);
 	}
 
 	.hero-content {

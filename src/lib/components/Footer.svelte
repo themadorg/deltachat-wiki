@@ -93,6 +93,8 @@
         border-top: 1px solid var(--border);
         padding: 5rem 2rem 3rem;
         margin-top: auto;
+        position: relative;
+        z-index: 2;
     }
 
     .footer-container {

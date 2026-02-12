@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/themadorg/deltachat-wiki/compare/v1.3.3...v1.3.4) (2026-02-12)
+
+
+### Bug Fixes
+
+* make the first page better ([6e50d0a](https://github.com/themadorg/deltachat-wiki/commit/6e50d0a5bdd3fc81c3d846da3f7353284dcd1c70))
+
 ## [1.3.3](https://github.com/themadorg/deltachat-wiki/compare/v1.3.2...v1.3.3) (2026-02-11)
 
 

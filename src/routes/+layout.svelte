@@ -47,8 +47,17 @@
 
 		// Intercept external link clicks at document level (catches all <a> tags)
 		document.addEventListener("click", handleExternalClick, true);
-		return () =>
+
+		// Handle stale chunk errors after redeployment
+		const handlePreloadError = () => {
+			window.location.reload();
+		};
+		window.addEventListener("vite:preloadError", handlePreloadError);
+
+		return () => {
 			document.removeEventListener("click", handleExternalClick, true);
+			window.removeEventListener("vite:preloadError", handlePreloadError);
+		};
 	});
 </script>
 

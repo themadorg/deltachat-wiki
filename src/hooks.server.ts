@@ -31,8 +31,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     const finalLang = supportedLangs.includes(lang) ? lang : 'fa';
     const finalDir = supportedLanguages.find(l => l.code === finalLang)?.dir || 'ltr';
 
+    // Language-agnostic routes (e.g. RFC viewer) must not get a language prefix
+    const isLangAgnostic = pathname === '/rfcs' || pathname.startsWith('/rfcs/');
+
     // Skip redirects for static files, API routes, and special paths
-    if (!hasLang && pathname !== '/') {
+    if (!hasLang && pathname !== '/' && !isLangAgnostic) {
         throw redirect(307, `/${finalLang}${pathname}`);
     }
 

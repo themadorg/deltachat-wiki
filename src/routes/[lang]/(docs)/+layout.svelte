@@ -235,7 +235,7 @@
                         </button>
 
                         <a
-                            href={config.socials.github}
+                            href={config.wiki.github}
                             class="action-btn"
                             target="_blank"
                             title="GitHub"

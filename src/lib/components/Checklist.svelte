@@ -13,6 +13,7 @@
         exportChecklistProgress,
         importChecklistProgress,
         getEssentialItemIds,
+        getChecklistYamlUrl,
         getRatingKey,
         type ChecklistDefinition,
         type ChecklistItem
@@ -148,7 +149,7 @@
                 <h2 class="checklist-title">{checklist.title}</h2>
                 <p class="checklist-desc">{checklist.description}</p>
                 <a
-                    href={checklist.repoUrl}
+                    href={getChecklistYamlUrl(checklist.id)}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="repo-link"
@@ -735,6 +736,40 @@
     .item-desc {
         font-size: 0.8rem;
         color: var(--text-muted);
+    }
+
+    :global(.zen-mode) .checklist {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    :global(.zen-mode) .checklist-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        margin: 0 0 0.35rem;
+        letter-spacing: -0.02em;
+    }
+
+    :global(.zen-mode) .checklist-desc {
+        margin: 0 0 0.5rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    :global(.zen-mode) .section-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+    }
+
+    :global(.zen-mode) .section-desc {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    :global(.zen-mode) .section-header {
+        margin-bottom: 0.75rem;
     }
 
     @media (max-width: 640px) {

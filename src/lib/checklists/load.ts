@@ -30,6 +30,12 @@ export interface ChecklistDefinition {
 
 export type ChecklistId = "core" | "desktop" | "mobile" | "server";
 
+export const CHECKLIST_WIKI_REPO = "https://github.com/themadorg/deltachat-wiki";
+
+export function getChecklistYamlUrl(id: ChecklistId) {
+    return `${CHECKLIST_WIKI_REPO}/blob/main/src/lib/checklists/${id}.yml`;
+}
+
 export const CHECKLIST_STORAGE_PREFIX = "build-checklist:";
 
 export const checklistEntries: {

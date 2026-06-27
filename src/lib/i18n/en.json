@@ -39,7 +39,7 @@
     "building_under_development_title": "Under development",
     "building_under_development_message": "This section is not finished or approved yet.",
     "subnav_home": "Home",
-    "checklist_view_repo": "View repository",
+    "checklist_view_repo": "View checklist source",
     "checklist_score_desc": "Overall readiness based on completed items",
     "checklist_items_complete": "items complete",
     "checklist_essential": "Essential",

@@ -48,9 +48,19 @@
 		// Intercept external link clicks at document level (catches all <a> tags)
 		document.addEventListener("click", handleExternalClick, true);
 
-		// Handle stale chunk errors after redeployment
-		const handlePreloadError = () => {
-			window.location.reload();
+		// Handle stale chunk errors after redeployment.
+		// Guard against reload loops: fast navigation aborts in-flight
+		// preloads and fires this event repeatedly, so only reload once
+		// within a short window instead of reloading on every error.
+		const handlePreloadError = (event: Event) => {
+			event.preventDefault();
+			const key = "vite-preload-error-reload";
+			const last = Number(sessionStorage.getItem(key) || 0);
+			const now = Date.now();
+			if (now - last > 10000) {
+				sessionStorage.setItem(key, String(now));
+				window.location.reload();
+			}
 		};
 		window.addEventListener("vite:preloadError", handlePreloadError);
 

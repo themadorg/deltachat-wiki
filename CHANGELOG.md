@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/themadorg/deltachat-wiki/compare/v1.4.0...v1.5.0) (2026-06-27)
+
+
+### Bug Fixes
+
+* update ChecklistDefinition and ChecklistYaml to use ChecklistId type for id; enhance ChecklistInfoModal with a dedicated backdrop button for improved accessibility ([f932adf](https://github.com/themadorg/deltachat-wiki/commit/f932adff6ba37088c4f6f82e772859cf9b9bf088))
+
+
+### Features
+
+* add checklist YAML URL retrieval and update repository link text ([f06ebdf](https://github.com/themadorg/deltachat-wiki/commit/f06ebdfd4b3ce8ad15caab57ad77f4043a1813a6))
+
 # [1.4.0](https://github.com/themadorg/deltachat-wiki/compare/v1.3.6...v1.4.0) (2026-06-27)
 
 

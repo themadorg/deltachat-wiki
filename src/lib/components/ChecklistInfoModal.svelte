@@ -43,16 +43,13 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="overlay" onclick={onclose}>
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
+<div class="overlay">
+    <button type="button" class="backdrop" onclick={onclose} aria-label={i18n.t("checklist_info_close")}></button>
     <div
         class="modal"
-        onclick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        tabindex="-1"
     >
         <div class="modal-header">
             <h2 class="modal-title">{title}</h2>
@@ -90,13 +87,21 @@
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: rgba(0, 0, 0, 0.45);
-        backdrop-filter: blur(2px);
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 1rem;
         animation: fadeIn 0.15s ease;
+    }
+
+    .backdrop {
+        position: absolute;
+        inset: 0;
+        border: none;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(2px);
+        cursor: default;
     }
 
     .modal {
@@ -109,6 +114,7 @@
         max-height: min(92vh, 920px);
         overflow: hidden;
         position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         animation: slideUp 0.2s ease;

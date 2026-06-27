@@ -21,7 +21,7 @@ export interface ChecklistSection {
 }
 
 export interface ChecklistDefinition {
-    id: string;
+    id: ChecklistId;
     title: string;
     description: string;
     repoUrl: string;
@@ -50,7 +50,7 @@ export const checklistEntries: {
 ];
 
 interface ChecklistYaml {
-    id: string;
+    id: ChecklistId;
     title: string;
     description: string;
     repo_url: string;

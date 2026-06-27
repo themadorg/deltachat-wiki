@@ -1,0 +1,369 @@
+id: server
+title: Relay
+description: Language-agnostic feature checklist for a Chatmail-compatible mail relay.
+repo_url: https://github.com/chatmail/relay
+sections:
+  - id: smtp-connect
+    title: SMTP - Connect
+    description: Listeners, ports, and TLS so clients and MTAs can reach the server.
+    items:
+      - id: smtp-inbound-listener
+        label: Inbound SMTP listener on port 25
+        essential: true
+        info: server/smtp-inbound-listener
+      - id: smtp-submission-587
+        label: Submission listener on port 587 (STARTTLS)
+        essential: true
+        info: server/smtp-submission-587
+      - id: smtp-submission-465
+        label: Submission listener on port 465 (SMTPS)
+        essential: true
+        info: server/smtp-submission-465
+      - id: tls-smtp
+        label: Valid TLS on SMTP listeners
+        essential: true
+        info: server/tls-smtp
+  - id: smtp-functionality
+    title: SMTP - Functionality
+    description: Protocol behaviour after a connection is established.
+    items:
+      - id: smtp-inbound-accept
+        label: Inbound SMTP accepts federated and external mail
+        essential: true
+        info: server/smtp-inbound-accept
+      - id: smtp-authentication
+        label: SMTP AUTH after TLS on submission ports
+        essential: true
+        info: server/smtp-authentication
+      - id: smtp-ehlo-identity
+        label: SMTP EHLO hostname matches the relay's public mail identity
+        info: server/smtp-ehlo-identity
+  - id: smtp-customization
+    title: SMTP - Customizability
+    description: Operator-tunable SMTP settings (ports, etc.) without code changes.
+    items:
+      - id: smtp-ports-configurable
+        label: SMTP listener ports changeable via config or admin API
+        info: server/smtp-ports-configurable
+      - id: smtp-submission-587-disable
+        label: Submission on port 587 (STARTTLS) can be disabled
+        info: server/smtp-submission-587-disable
+      - id: smtp-submission-465-disable
+        label: Submission on port 465 (SMTPS) can be disabled
+        info: server/smtp-submission-465-disable
+  - id: imap-connect
+    title: IMAP - Connect
+    description: Listeners, ports, and TLS so Delta Chat can sync mail.
+    items:
+      - id: imap-starttls-143
+        label: IMAP listener on port 143 (STARTTLS)
+        info: server/imap-starttls-143
+      - id: imap-imaps-993
+        label: IMAP listener on port 993 (IMAPS)
+        essential: true
+        info: server/imap-imaps-993
+      - id: tls-imap
+        label: Valid TLS on IMAP listeners
+        essential: true
+        info: server/tls-imap
+  - id: imap-functionality
+    title: IMAP - Functionality
+    description: Protocol commands and extensions after a connection is established.
+    items:
+      - id: imap-server
+        label: IMAP4rev1 — mailbox sync
+        essential: true
+        info: server/imap-server
+      - id: imap-idle
+        label: IMAP IDLE — notify clients of new mail without polling (RFC 2177)
+        essential: true
+        info: server/imap-idle
+      - id: imap-quota
+        label: IMAP QUOTA — per-user storage limits (RFC 2087)
+        info: server/imap-quota
+      - id: imap-move
+        label: IMAP MOVE — atomic relocate for mvbox and trash (RFC 6851)
+        info: server/imap-move
+      - id: imap-special-use-inbox
+        label: IMAP special-use `\Inbox` folder attribute
+        essential: true
+        info: server/imap-special-use-inbox
+      - id: imap-special-use-sent
+        label: IMAP special-use `\Sent` folder attribute
+        info: server/imap-special-use-sent
+      - id: imap-special-use-trash
+        label: IMAP special-use `\Trash` folder attribute
+        info: server/imap-special-use-trash
+      - id: imap-special-use-mvbox
+        label: IMAP special-use mvbox (saved messages) folder attribute
+        info: server/imap-special-use-mvbox
+      - id: imap-metadata-turn
+        label: IMAP METADATA `/shared/vendor/deltachat/turn` key (RFC 5464)
+        essential: true
+        info: server/imap-metadata-turn
+      - id: imap-metadata-iroh
+        label: IMAP METADATA `/shared/vendor/deltachat/irohrelay` key
+        info: server/imap-metadata-iroh
+      - id: imap-metadata-server-info
+        label: IMAP METADATA `/shared/comment` and `/shared/admin` keys
+        info: server/imap-metadata-server-info
+      - id: imap-xchatmail
+        label: IMAP capability XCHATMAIL — Chatmail server detection
+        essential: true
+        info: server/imap-xchatmail
+      - id: imap-xdeltapush
+        label: IMAP capability XDELTAPUSH — device token storage for push
+        info: server/imap-xdeltapush
+      - id: imap-pgp-append
+        label: IMAP APPEND — PGP-only policy on message upload
+        essential: true
+        info: server/imap-pgp-append
+      - id: concurrent-imap-sessions
+        label: Concurrent IMAP sessions — multiple connections per account
+        info: server/concurrent-imap-sessions
+  - id: imap-customization
+    title: IMAP - Customizability
+    description: Operator-tunable IMAP settings (ports, etc.) without code changes.
+    items:
+      - id: imap-ports-configurable
+        label: IMAP listener ports changeable via config or admin API
+        info: server/imap-ports-configurable
+  - id: accounts-functionality
+    title: Accounts - Functionality
+    description: How users get addresses and authenticate on the relay.
+    items:
+      - id: jit-registration
+        label: Just-in-time account creation on first login
+        essential: true
+        info: server/jit-registration
+      - id: http-new-registration
+        label: HTTP `POST /new` creates accounts when registration is open
+        info: server/http-new-registration
+      - id: registration-tokens
+        label: Optional registration tokens for gated signup
+        info: server/registration-tokens
+      - id: blocklist
+        label: Per-username blocklist prevents login and JIT create
+        info: server/blocklist
+      - id: username-length-limits
+        label: Username length limits enforced on create
+        info: server/username-length-limits
+      - id: password-length-limits
+        label: Password length limits enforced on create
+        info: server/password-length-limits
+  - id: accounts-customizability
+    title: Accounts - Customizability
+    description: Operator-tunable registration settings without code changes.
+    items:
+      - id: registration-open-toggle
+        label: HTTP `POST /new` registration can be disabled
+        info: server/registration-open-toggle
+      - id: jit-registration-disable
+        label: JIT registration can be disabled
+        info: server/jit-registration-disable
+  - id: message-policy
+    title: Message Policy
+    description: Chatmail security model for user-submitted mail.
+    items:
+      - id: pgp-only-enforcement
+        label: Only PGP/MIME encrypted user mail accepted on submission
+        essential: true
+        info: server/pgp-only-enforcement
+      - id: secure-join-exemption
+        label: Secure Join handshake messages accepted without full encryption
+        essential: true
+        info: server/secure-join-exemption
+      - id: reject-unencrypted-523
+        label: Plaintext rejected with SMTP code `523 Encryption Needed`
+        essential: true
+        info: server/reject-unencrypted-523
+  - id: storage
+    title: Storage & Quotas
+    description: Persistent mail and per-user limits.
+    items:
+      - id: mailbox-storage
+        label: Per-user mailboxes store and retrieve messages reliably
+        essential: true
+        info: server/mailbox-storage
+      - id: quota-on-delivery
+        label: Storage quota enforced on mail delivery
+        info: server/quota-on-delivery
+      - id: smtp-message-size-limit
+        label: Maximum SMTP message size limit enforced
+        info: server/smtp-message-size-limit
+      - id: imap-append-size-limit
+        label: Maximum IMAP APPEND size limit enforced
+        info: server/imap-append-size-limit
+      - id: message-retention-period
+        label: Configurable message retention period
+        info: server/message-retention-period
+      - id: message-purge
+        label: Expired messages purged on schedule
+        info: server/message-purge
+  - id: federation
+    title: Federation
+    description: Mail between Chatmail relays.
+    items:
+      - id: mxdeliv-inbound
+        label: HTTP `POST /mxdeliv` receives federated mail
+        essential: true
+        info: server/mxdeliv-inbound
+      - id: mxdeliv-outbound-https
+        label: Outbound delivery via HTTPS `/mxdeliv`
+        essential: true
+        info: server/mxdeliv-outbound-https
+      - id: mxdeliv-outbound-smtp
+        label: Outbound delivery via SMTP fallback on port 25
+        essential: true
+        info: server/mxdeliv-outbound-smtp
+      - id: federation-policy
+        label: Per-domain ACCEPT/REJECT federation policy on all paths
+        essential: true
+        info: server/federation-policy
+      - id: outbound-retry-queue
+        label: Failed remote deliveries queued with retry backoff
+        info: server/outbound-retry-queue
+      - id: endpoint-overrides
+        label: DNS/endpoint overrides for routing to specific peers
+        info: server/endpoint-overrides
+      - id: federation-body-limit
+        label: Maximum `/mxdeliv` HTTP body size enforced (large attachments)
+        info: server/federation-body-limit
+      - id: federation-silent-dismiss
+        label: Silent dismiss suppresses delivery to problematic outbound domains
+        info: server/federation-silent-dismiss
+  - id: http-discovery
+    title: HTTP & Discovery
+    description: How Delta Chat clients find and join the relay.
+    items:
+      - id: autoconfig-xml
+        label: Autoconfig served at `/.well-known/autoconfig/mail/config-v1.1.xml`
+        essential: true
+        info: server/autoconfig-xml
+      - id: registration-homepage
+        label: HTTPS homepage with QR code for onboarding
+        essential: true
+        info: server/registration-homepage
+      - id: dclogin-imap-hints
+        label: dclogin URLs include correct IMAP host, port, and security hints
+        essential: true
+        info: server/dclogin-imap-hints
+      - id: dclogin-smtp-hints
+        label: dclogin URLs include correct SMTP host, port, and security hints
+        essential: true
+        info: server/dclogin-smtp-hints
+      - id: tls-https
+        label: Valid TLS on HTTPS (port 443)
+        essential: true
+        info: server/tls-https
+      - id: acme-renewal
+        label: TLS certificates obtainable and renewable (e.g. ACME)
+        info: server/acme-renewal
+  - id: administration
+    title: Administration
+    description: Operator management without editing files by hand.
+    items:
+      - id: admin-api
+        label: Authenticated admin API for accounts, services, and settings
+        essential: true
+        info: server/admin-api
+      - id: dynamic-config
+        label: Runtime settings changeable without full restart
+        info: server/dynamic-config
+      - id: install-bootstrap-config
+        label: Install or bootstrap command creates initial config
+        essential: true
+        info: server/install-bootstrap-config
+      - id: install-bootstrap-storage
+        label: Install or bootstrap command initializes mail storage
+        essential: true
+        info: server/install-bootstrap-storage
+      - id: install-bootstrap-services
+        label: Install or bootstrap command starts mail services
+        essential: true
+        info: server/install-bootstrap-services
+  - id: realtime
+    title: Realtime & Calls
+    description: Voice/video calls and mobile wake-up.
+    items:
+      - id: stun-server
+        label: STUN server for reflexive address discovery
+        info: server/stun-server
+      - id: turn-server
+        label: TURN server with time-limited credentials
+        info: server/turn-server
+      - id: turn-imap-discovery
+        label: TURN credentials exposed via IMAP METADATA
+        info: server/turn-imap-discovery
+      - id: iroh-relay
+        label: Iroh relay URL exposed for WebXDC realtime
+        info: server/iroh-relay
+      - id: push-notifications
+        label: Push notifications to mobile clients on new mail
+        info: server/push-notifications
+  - id: optional-services
+    title: Optional Services
+    description: Not required for basic Chatmail but expected in full parity.
+    items:
+      - id: webimap-rest
+        label: WebIMAP REST access
+        info: server/webimap-rest
+      - id: webimap-websocket
+        label: WebIMAP WebSocket access
+        info: server/webimap-websocket
+      - id: websmtp
+        label: WebSMTP HTTP submit API
+        info: server/websmtp
+      - id: shadowsocks-proxy
+        label: Shadowsocks camouflage proxy for restricted networks
+        info: server/shadowsocks-proxy
+      - id: admin-web-ui
+        label: Web-based admin interface
+        info: server/admin-web-ui
+  - id: security-privacy
+    title: Security & Privacy
+    items:
+      - id: no-log-mode
+        label: No-Log mode discards mail-related logging
+        essential: true
+        info: server/no-log-mode
+      - id: privacy-policy-page
+        label: Privacy policy page published on relay hostname
+        info: server/privacy-policy-page
+  - id: verification
+    title: Delta Chat Verification
+    description: Real Delta Chat clients are the compatibility test.
+    items:
+      - id: client-onboarding-qr
+        label: New user can scan QR code and log in
+        essential: true
+        info: server/client-onboarding-qr
+      - id: client-onboarding-dclogin
+        label: New user can use dclogin invite link and log in
+        essential: true
+        info: server/client-onboarding-dclogin
+      - id: encrypted-messaging
+        label: Two users exchange PGP-encrypted 1:1 messages
+        essential: true
+        info: server/encrypted-messaging
+      - id: secure-join-verified
+        label: Secure Join verifies contact keys
+        essential: true
+        info: server/secure-join-verified
+      - id: group-messaging
+        label: Encrypted group chats work
+        info: server/group-messaging
+      - id: file-transfer
+        label: Large encrypted file attachments roundtrip with correct hash
+        info: server/file-transfer
+      - id: federation-cross-server
+        label: Encrypted mail delivers between two Chatmail relays
+        essential: true
+        info: server/federation-cross-server
+      - id: audio-video-calls
+        label: Audio/video calls complete using relay TURN
+        info: server/audio-video-calls
+      - id: deltachat-e2e-suite
+        label: Standard Delta Chat E2E test scenarios pass
+        essential: true
+        info: server/deltachat-e2e-suite

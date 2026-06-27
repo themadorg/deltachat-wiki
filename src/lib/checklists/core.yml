@@ -1,0 +1,104 @@
+id: core
+title: Core Library
+description: Rust library powering all Delta Chat clients.
+repo_url: https://github.com/chatmail/core
+sections:
+  - id: environment
+    title: Environment
+    description: Tools and system setup for building the core.
+    items:
+      - id: rust-toolchain
+        label: Rust toolchain installed (stable)
+        href: https://rustup.rs/
+        essential: true
+        info: core/rust-toolchain
+      - id: git-submodules
+        label: Git submodules initialized (`git submodule update --init`)
+        essential: true
+        info: core/git-submodules
+      - id: cmake
+        label: CMake installed
+        info: core/cmake
+      - id: pkg-config
+        label: pkg-config available
+        info: core/pkg-config
+      - id: clang
+        label: Clang / LLVM compiler available
+        info: core/clang
+  - id: dependencies
+    title: System Dependencies
+    description: Native libraries required by the core.
+    items:
+      - id: openssl
+        label: OpenSSL development headers installed
+        essential: true
+        info: core/openssl
+      - id: sqlite
+        label: SQLite development headers installed
+        essential: true
+        info: core/sqlite
+      - id: libetpan
+        label: libetpan dependencies satisfied
+        info: core/libetpan
+      - id: sodium
+        label: libsodium development headers installed
+        info: core/sodium
+      - id: vcpkg
+        label: vcpkg setup complete (Windows/macOS if applicable)
+        info: core/vcpkg
+  - id: build
+    title: Build & Test
+    items:
+      - id: cargo-build
+        label: "`cargo build --release` succeeds"
+        essential: true
+        info: core/cargo-build
+      - id: cargo-test
+        label: "`cargo test` passes"
+        essential: true
+        info: core/cargo-test
+      - id: deltachat-rpc
+        label: deltachat-rpc-server starts without errors
+        info: core/deltachat-rpc
+      - id: ffi-bindings
+        label: FFI bindings compile for target platforms
+        info: core/ffi-bindings
+      - id: integration-test
+        label: Integration tests pass with a test account
+        info: core/integration-test
+  - id: quality
+    title: Code Quality
+    items:
+      - id: rustfmt
+        label: "`cargo fmt --check` passes"
+        info: core/rustfmt
+      - id: clippy
+        label: "`cargo clippy` passes without warnings"
+        info: core/clippy
+      - id: spec-read
+        label: Read the core specification (`spec.md`)
+        info: core/spec-read
+      - id: standards-read
+        label: Reviewed standards used in Delta Chat
+        info: core/standards-read
+      - id: changelog
+        label: Changelog entry added for user-visible changes
+        info: core/changelog
+  - id: release
+    title: Release Readiness
+    items:
+      - id: version-bump
+        label: Version bumped in Cargo.toml
+        info: core/version-bump
+      - id: api-stable
+        label: Public API changes documented
+        info: core/api-stable
+      - id: cross-platform
+        label: Tested on all target platforms
+        info: core/cross-platform
+      - id: ci-green
+        label: CI pipeline passes on the PR
+        info: core/ci-green
+      - id: review
+        label: Code review completed and approved
+        info: core/review

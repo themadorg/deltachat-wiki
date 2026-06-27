@@ -24,3 +24,4 @@ vite.config.ts.timestamp-*
 # Webxdc build output
 dist/
 data/
+context/

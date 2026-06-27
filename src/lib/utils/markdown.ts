@@ -40,8 +40,23 @@ export async function highlighter(code: string, lang: string | null | undefined 
     </div>`;
 }
 
+function remarkRewriteRfcLinks() {
+    return (tree: any) => {
+        const visit = (node: any) => {
+            if (node.type === 'link' && typeof node.url === 'string') {
+                node.url = node.url.replace(/^(\/rfcs\/[\w.-]+)\.txt$/, '$1');
+            }
+            if (Array.isArray(node.children)) {
+                for (const child of node.children) visit(child);
+            }
+        };
+        visit(tree);
+    };
+}
+
 export const mdsvexConfig = defineMDSveXConfig({
     extensions: ['.md', '.svx'],
+    remarkPlugins: [remarkRewriteRfcLinks],
     highlight: {
         highlighter
     },
@@ -51,6 +66,7 @@ export const mdsvexConfig = defineMDSveXConfig({
         general: path.resolve(__dirname, '../layouts/DocLayout.svelte'),
         bot: path.resolve(__dirname, '../layouts/DocLayout.svelte'),
         servers: path.resolve(__dirname, '../layouts/DocLayout.svelte'),
+        'checklist-info': path.resolve(__dirname, '../layouts/ChecklistInfoLayout.svelte'),
         _: path.resolve(__dirname, '../layouts/DocLayout.svelte')
     }
 });

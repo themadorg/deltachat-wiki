@@ -2,7 +2,7 @@
 	import "./layout.css";
 	import { setI18n, supportedLanguages } from "$lib/i18n.svelte";
 	import { theme } from "$lib/theme.svelte";
-	import { onMount } from "svelte";
+	import { onMount, untrack } from "svelte";
 	import { browser } from "$app/environment";
 	import { page } from "$app/state";
 	import { handleExternalClick } from "$lib/webxdc.svelte";
@@ -14,7 +14,7 @@
 	let { children, data } = $props();
 
 	// Use server data for initial lang (always correct, no race condition)
-	const initialLang = data?.lang || "en";
+	const initialLang = untrack(() => data?.lang) || "en";
 
 	// Initialize i18n context with server-provided lang
 	const i18n = setI18n(initialLang);

@@ -7,7 +7,11 @@ import { supportedLangCodes, supportedLanguages } from '$lib/languages';
 export const handle: Handle = async ({ event, resolve }) => {
     const { pathname } = event.url;
 
-    // Bail early for static files and internal paths
+    const rfcTxtMatch = pathname.match(/^\/rfcs\/(.+)\.txt$/);
+    if (rfcTxtMatch) {
+        throw redirect(307, `/rfcs/${rfcTxtMatch[1]}`);
+    }
+
     if (pathname.includes('.') || pathname.startsWith('/_') || pathname.startsWith('/debug')) {
         return resolve(event);
     }

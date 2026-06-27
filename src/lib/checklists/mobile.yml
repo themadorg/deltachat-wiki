@@ -1,0 +1,237 @@
+id: mobile
+title: Mobile Application
+description: Feature checklist for Delta Chat Android and iOS clients — chat UI, messaging, media, and device integration.
+repo_url: https://github.com/deltachat/deltachat-android
+sections:
+  - id: account
+    title: Account
+    description: Log in, sync messages, and add another device.
+    items:
+      - id: account-login
+        label: Add account and log in
+        essential: true
+        info: mobile/account-login
+      - id: message-sync
+        label: Incoming messages sync into the chat list
+        essential: true
+        info: mobile/message-sync
+      - id: connectivity-indicator
+        label: Connection status shown when sync fails
+        info: mobile/connectivity-indicator
+      - id: multi-device-qr
+        label: Second device added via QR code transfer
+        info: mobile/multi-device-qr
+  - id: multiple-accounts
+    title: Multiple Accounts
+    description: More than one profile in the same app.
+    items:
+      - id: multi-account
+        label: Multiple accounts
+        info: mobile/multi-account
+      - id: account-selector
+        label: Account selector switches active account
+        info: mobile/account-selector
+  - id: chat-ui
+    title: Chat UI
+    description: Lists, bubbles, and chat navigation on small screens.
+    items:
+      - id: chat-list
+        label: Chat list shows conversations with preview and timestamp
+        essential: true
+        info: mobile/chat-list
+      - id: message-bubbles
+        label: Message bubbles for sent and received text
+        essential: true
+        info: mobile/message-bubbles
+      - id: chat-scroll
+        label: Chat view scrolls and loads older messages
+        essential: true
+        info: mobile/chat-scroll
+      - id: unread-badges
+        label: Unread count badges on chats
+        info: mobile/unread-badges
+      - id: pin-chat
+        label: Pin chat to top of list
+        info: mobile/pin-chat
+      - id: mute-chat
+        label: Mute chat notifications
+        info: mobile/mute-chat
+      - id: archive-chat
+        label: Archive chat hides from main list
+        info: mobile/archive-chat
+      - id: saved-messages-chat
+        label: Saved Messages chat for notes and bookmarks
+        info: mobile/saved-messages-chat
+  - id: messaging
+    title: Messaging
+    description: Compose, replies, reactions, and message lifecycle.
+    items:
+      - id: compose-send-text
+        label: Send text message in active chat
+        essential: true
+        info: mobile/compose-send-text
+      - id: reply-to-message
+        label: Reply quotes a specific message
+        essential: true
+        info: mobile/reply-to-message
+      - id: edit-message
+        label: Edit sent message text after send
+        info: mobile/edit-message
+      - id: delete-message
+        label: Delete message for self or everyone (where supported)
+        info: mobile/delete-message
+      - id: emoji-reaction
+        label: Emoji reaction on a message
+        info: mobile/emoji-reaction
+      - id: disappearing-messages
+        label: Disappearing messages timer per chat
+        info: mobile/disappearing-messages
+      - id: delivery-read-ticks
+        label: Delivery and read tick marks on outgoing messages
+        info: mobile/delivery-read-ticks
+      - id: compose-draft-persists
+        label: Unsent compose draft persists when switching chats
+        info: mobile/compose-draft-persists
+  - id: media
+    title: Media & Attachments
+    description: Camera, gallery, voice, files, and viewers.
+    items:
+      - id: send-image
+        label: Send image in chat
+        essential: true
+        info: mobile/send-image
+      - id: image-viewer
+        label: Image viewer opens full-size with pinch zoom
+        essential: true
+        info: mobile/image-viewer
+      - id: camera-capture
+        label: Take photo from in-app camera
+        info: mobile/camera-capture
+      - id: gallery-picker
+        label: Pick image or video from device gallery
+        info: mobile/gallery-picker
+      - id: send-video
+        label: Send video file in chat
+        info: mobile/send-video
+      - id: video-player
+        label: Inline or fullscreen video playback
+        info: mobile/video-player
+      - id: voice-message
+        label: Record and play voice messages
+        info: mobile/voice-message
+      - id: send-file-attachment
+        label: Send arbitrary file attachment
+        info: mobile/send-file-attachment
+      - id: image-gallery-view
+        label: Gallery view of images in a chat
+        info: mobile/image-gallery-view
+  - id: contacts-groups
+    title: Contacts & Groups
+    description: People, groups, and presence.
+    items:
+      - id: contact-list
+        label: Contact list shows known addresses
+        info: mobile/contact-list
+      - id: start-1-1-chat
+        label: Start new 1:1 chat from contact or new address
+        essential: true
+        info: mobile/start-1-1-chat
+      - id: create-group
+        label: Create group chat with multiple members
+        essential: true
+        info: mobile/create-group
+      - id: group-member-add
+        label: Add member to existing group
+        info: mobile/group-member-add
+      - id: verified-group-qr
+        label: Verified group join via QR code
+        info: mobile/verified-group-qr
+      - id: share-contact-introduce
+        label: Share contact card to introduce two people
+        info: mobile/share-contact-introduce
+      - id: green-dot-presence
+        label: Green dot shows recently active contact
+        info: mobile/green-dot-presence
+  - id: encryption
+    title: Encryption & Verification
+    description: Autocrypt E2E and contact verification.
+    items:
+      - id: e2e-encrypt-1-1
+        label: Outgoing 1:1 messages sent as PGP-encrypted
+        essential: true
+        info: mobile/e2e-encrypt-1-1
+      - id: verify-contact-qr
+        label: Verify contact by scanning QR code
+        essential: true
+        info: mobile/verify-contact-qr
+      - id: secure-join-group
+        label: Secure Join adds verified member to encrypted group
+        info: mobile/secure-join-group
+      - id: encryption-broken-banner
+        label: Encryption problem banner when keys do not match
+        info: mobile/encryption-broken-banner
+  - id: webxdc
+    title: Webxdc
+    description: In-chat apps on mobile WebView.
+    items:
+      - id: webxdc-load
+        label: Webxdc app opens inside chat
+        info: mobile/webxdc-load
+      - id: webxdc-send-update
+        label: Webxdc app can send updates to chat members
+        info: mobile/webxdc-send-update
+  - id: mobile-platform
+    title: Mobile Platform
+    description: Push, background sync, sharing, and device integration.
+    items:
+      - id: push-notifications
+        label: Push notification on new message
+        essential: true
+        info: mobile/push-notifications
+      - id: background-sync
+        label: Incoming messages sync while app is in background
+        essential: true
+        info: mobile/background-sync
+      - id: launcher-badge
+        label: Unread count badge on app icon
+        info: mobile/launcher-badge
+      - id: share-into-app
+        label: Share text or file from another app into Delta Chat
+        info: mobile/share-into-app
+      - id: offline-sync
+        label: Outgoing messages queue and sync after reconnect
+        info: mobile/offline-sync
+      - id: pull-to-refresh
+        label: Pull to refresh chat list
+        info: mobile/pull-to-refresh
+  - id: settings-ux
+    title: Settings & UX
+    description: Mobile preferences and system integration.
+    items:
+      - id: theme-switch
+        label: Light and dark theme switch
+        info: mobile/theme-switch
+      - id: in-chat-search
+        label: Search messages within a chat
+        info: mobile/in-chat-search
+      - id: profile-avatar-edit
+        label: Profile name and avatar editable
+        info: mobile/profile-avatar-edit
+      - id: system-back-navigation
+        label: System back gesture returns to chat list from chat
+        info: mobile/system-back-navigation
+  - id: verification
+    title: Verification
+    description: End-to-end smoke tests on a mobile build.
+    items:
+      - id: two-device-chat
+        label: Two accounts exchange messages on mobile
+        essential: true
+        info: mobile/two-device-chat
+      - id: encrypted-group-chat
+        label: Encrypted group chat works on mobile
+        info: mobile/encrypted-group-chat
+      - id: attachment-roundtrip
+        label: Image attachment roundtrips with correct preview
+        essential: true
+        info: mobile/attachment-roundtrip

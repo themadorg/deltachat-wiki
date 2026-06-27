@@ -5,7 +5,8 @@ export const config = {
             { labelKey: "subnav_webxdc", slug: "webxdc/overview", prefix: "webxdc" },
             { labelKey: "subnav_bot", slug: "bot/overview", prefix: "bot" },
             { labelKey: "subnav_servers", slug: "servers/overview", prefix: "servers" },
-            { labelKey: "subnav_autocrypt2", slug: "autocrypt2/overview", prefix: "autocrypt2" }
+            { labelKey: "subnav_autocrypt2", slug: "autocrypt2/overview", prefix: "autocrypt2" },
+            { labelKey: "subnav_building", slug: "building/overview", prefix: "building" }
         ]
     },
     brand: {

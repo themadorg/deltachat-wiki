@@ -1,0 +1,357 @@
+id: desktop
+title: Desktop Application
+description: Feature checklist for the Delta Chat desktop client — aligned with deltachat-desktop UI.
+repo_url: https://github.com/deltachat/deltachat-desktop
+sections:
+  - id: account
+    title: Account
+    description: Onboarding, sync, connectivity, and multi-device.
+    items:
+      - id: instant-chatmail-account
+        label: Create instant chatmail account
+        essential: true
+        info: desktop/instant-chatmail-account
+      - id: manual-email-login
+        label: Log in with email and password (IMAP/SMTP)
+        essential: true
+        info: desktop/manual-email-login
+      - id: import-backup-file
+        label: Import account from backup file (.tar / .bak)
+        info: desktop/import-backup-file
+      - id: message-sync
+        label: Incoming messages sync into the chat list
+        essential: true
+        info: desktop/message-sync
+      - id: connectivity-states
+        label: Connectivity status shown (connected / updating / connecting / offline)
+        info: desktop/connectivity-states
+      - id: multi-device-qr
+        label: Second device added via QR code transfer
+        info: desktop/multi-device-qr
+  - id: multiple-accounts
+    title: Multiple Accounts
+    description: More than one profile in the same client.
+    items:
+      - id: multi-account
+        label: Multiple accounts
+        info: desktop/multi-account
+      - id: account-selector
+        label: Account selector switches active account
+        info: desktop/account-selector
+  - id: chat-list
+    title: Chat List
+    description: Conversation list, badges, and chat actions.
+    items:
+      - id: chat-list
+        label: Chat list shows preview text and timestamp
+        essential: true
+        info: desktop/chat-list
+      - id: unread-badges
+        label: Unread count badges on chats and accounts
+        info: desktop/unread-badges
+      - id: pin-chat
+        label: Pin chat to top of list
+        info: desktop/pin-chat
+      - id: mute-chat
+        label: Mute chat with duration (1h / 8h / 1d / 7d / forever)
+        info: desktop/mute-chat
+      - id: archive-chat
+        label: Archive chat and open archived chats view
+        info: desktop/archive-chat
+      - id: mark-read-unread
+        label: Mark chat read or unread
+        info: desktop/mark-read-unread
+      - id: saved-messages-chat
+        label: Saved Messages chat for notes and bookmarks
+        info: desktop/saved-messages-chat
+      - id: contact-request-flow
+        label: Accept or block incoming contact requests
+        info: desktop/contact-request-flow
+  - id: search
+    title: Search
+    description: Global, in-chat, and hashtag search.
+    items:
+      - id: global-search
+        label: Global search across chats, contacts, and messages
+        info: desktop/global-search
+      - id: in-chat-search
+        label: Search messages within active chat
+        info: desktop/in-chat-search
+      - id: hashtag-search
+        label: Click hashtag in message to search
+        info: desktop/hashtag-search
+  - id: message-list
+    title: Message List
+    description: Scrolling, read state, and navigation in chat view.
+    items:
+      - id: message-bubbles
+        label: Message bubbles for sent and received text
+        essential: true
+        info: desktop/message-bubbles
+      - id: chat-scroll
+        label: Chat view scrolls and loads older messages
+        essential: true
+        info: desktop/chat-scroll
+      - id: first-unread-highlight
+        label: First unread message highlighted on chat open
+        info: desktop/first-unread-highlight
+      - id: jump-down-unread
+        label: Jump-down button shows unread count and scrolls to bottom
+        info: desktop/jump-down-unread
+      - id: jump-to-quoted-message
+        label: Click quote jumps to original message
+        info: desktop/jump-to-quoted-message
+  - id: messaging
+    title: Messaging
+    description: Compose, replies, reactions, and message lifecycle.
+    items:
+      - id: compose-send-text
+        label: Send text message in active chat
+        essential: true
+        info: desktop/compose-send-text
+      - id: reply-to-message
+        label: Reply quotes a specific message
+        essential: true
+        info: desktop/reply-to-message
+      - id: reply-privately
+        label: Reply privately to group member in 1:1 chat
+        info: desktop/reply-privately
+      - id: edit-message
+        label: Edit sent message text after send
+        info: desktop/edit-message
+      - id: delete-message
+        label: Delete message with confirmation
+        info: desktop/delete-message
+      - id: forward-message
+        label: Forward message to another chat
+        info: desktop/forward-message
+      - id: save-unsave-message
+        label: Save or unsave message to Saved Messages
+        info: desktop/save-unsave-message
+      - id: emoji-reaction
+        label: Emoji reaction on a message
+        info: desktop/emoji-reaction
+      - id: disappearing-messages
+        label: Disappearing messages timer per chat
+        info: desktop/disappearing-messages
+      - id: delivery-read-ticks
+        label: Delivery and read tick marks on outgoing messages
+        info: desktop/delivery-read-ticks
+      - id: compose-draft-persists
+        label: Unsent compose draft persists when switching chats
+        info: desktop/compose-draft-persists
+  - id: composer
+    title: Composer
+    description: Emoji, stickers, and compose helpers.
+    items:
+      - id: emoji-picker
+        label: Emoji picker inserts into message draft
+        info: desktop/emoji-picker
+      - id: send-sticker
+        label: Send sticker from sticker packs
+        info: desktop/send-sticker
+  - id: media
+    title: Media & Attachments
+    description: Images, video, voice, files, and viewers.
+    items:
+      - id: send-image
+        label: Send image in chat
+        essential: true
+        info: desktop/send-image
+      - id: image-caption
+        label: Send image with text caption in one message
+        info: desktop/image-caption
+      - id: image-viewer
+        label: Fullscreen image viewer with zoom and prev/next
+        essential: true
+        info: desktop/image-viewer
+      - id: send-video
+        label: Send video file in chat
+        info: desktop/send-video
+      - id: inline-video-audio
+        label: Inline video and audio playback in chat
+        info: desktop/inline-video-audio
+      - id: voice-message
+        label: Record and play voice messages
+        info: desktop/voice-message
+      - id: send-file-attachment
+        label: Send arbitrary file attachment
+        info: desktop/send-file-attachment
+      - id: paste-attachment
+        label: Paste image or file from clipboard into composer
+        info: desktop/paste-attachment
+      - id: drag-drop-attachment
+        label: Drag and drop file into chat to attach
+        info: desktop/drag-drop-attachment
+      - id: global-voice-player
+        label: Global voice message player bar across chats
+        info: desktop/global-voice-player
+  - id: gallery
+    title: Apps & Media Gallery
+    description: Per-chat and account-wide media browser.
+    items:
+      - id: per-chat-gallery
+        label: Apps and media gallery for current chat
+        info: desktop/per-chat-gallery
+      - id: gallery-tabs
+        label: Gallery tabs for Webxdc, images, video, audio, and files
+        info: desktop/gallery-tabs
+  - id: contacts-groups
+    title: Contacts, Groups & Channels
+    description: People, groups, channels, and blocking.
+    items:
+      - id: contact-list
+        label: Contact list shows known addresses
+        info: desktop/contact-list
+      - id: start-1-1-chat
+        label: Start new 1:1 chat from contact or email address
+        essential: true
+        info: desktop/start-1-1-chat
+      - id: create-group
+        label: Create encrypted group chat
+        essential: true
+        info: desktop/create-group
+      - id: edit-group
+        label: Edit group name, image, description, and members
+        info: desktop/edit-group
+      - id: group-member-add
+        label: Add member to existing group
+        info: desktop/group-member-add
+      - id: leave-group
+        label: Leave group (optionally leave and delete)
+        info: desktop/leave-group
+      - id: create-channel
+        label: Create outbound broadcast channel
+        info: desktop/create-channel
+      - id: block-unblock-contact
+        label: Block and unblock contacts
+        info: desktop/block-unblock-contact
+      - id: share-contact
+        label: Share contact card to another chat
+        info: desktop/share-contact
+      - id: green-dot-presence
+        label: Green dot shows contact recently seen (~10 min)
+        info: desktop/green-dot-presence
+  - id: qr-invites
+    title: QR Codes & Invites
+    description: Show, scan, and join via QR.
+    items:
+      - id: show-invite-qr
+        label: Show account or group invite QR code
+        info: desktop/show-invite-qr
+      - id: scan-qr
+        label: Scan QR code (camera, paste, or image file)
+        info: desktop/scan-qr
+      - id: verified-group-qr
+        label: Join verified group via QR code (secure join)
+        info: desktop/verified-group-qr
+      - id: verify-contact-qr
+        label: Verify contact by scanning QR code
+        essential: true
+        info: desktop/verify-contact-qr
+  - id: encryption
+    title: Encryption & Verification
+    description: Autocrypt E2E, protection UI, and read receipts.
+    items:
+      - id: e2e-encrypt-1-1
+        label: Padlock shown on encrypted 1:1 messages
+        essential: true
+        info: desktop/e2e-encrypt-1-1
+      - id: protection-info-message
+        label: Chat protection info message opens explanation dialog
+        info: desktop/protection-info-message
+      - id: encryption-info-dialog
+        label: Encryption info available from chat menu
+        info: desktop/encryption-info-dialog
+      - id: secure-join-group
+        label: Secure Join adds verified member to encrypted group
+        info: desktop/secure-join-group
+      - id: read-receipts-setting
+        label: Read receipts toggle in settings
+        info: desktop/read-receipts-setting
+  - id: webxdc
+    title: Webxdc
+    description: In-chat apps, store picker, gallery, app window, and OS integration.
+    items:
+      - id: webxdc-app-picker
+        label: Send Webxdc app from composer attachment menu
+        info: desktop/webxdc-app-picker
+      - id: webxdc-app-picker-categories
+        label: App picker shows Home, Tools, and Games categories
+        info: desktop/webxdc-app-picker-categories
+      - id: webxdc-app-picker-search
+        label: Search apps in store picker
+        info: desktop/webxdc-app-picker-search
+      - id: webxdc-draft-preview
+        label: Composer draft shows Webxdc icon and name before send
+        info: desktop/webxdc-draft-preview
+      - id: webxdc-message-bubble
+        label: Webxdc app shown as message in chat
+        info: desktop/webxdc-message-bubble
+      - id: webxdc-status-updates
+        label: Webxdc summary updates live in chat
+        info: desktop/webxdc-status-updates
+      - id: webxdc-quote-icon
+        label: Reply quote shows Webxdc app icon
+        info: desktop/webxdc-quote-icon
+      - id: webxdc-info-message-opens-app
+        label: Click Webxdc info message opens parent app
+        info: desktop/webxdc-info-message-opens-app
+      - id: webxdc-show-app-in-chat
+        label: Show app in chat jumps to parent app message
+        info: desktop/webxdc-show-app-in-chat
+      - id: webxdc-navbar-recent-icons
+        label: Recent Webxdc icons in chat navbar (up to 3)
+        info: desktop/webxdc-navbar-recent-icons
+      - id: webxdc-gallery-open-app
+        label: Open Webxdc app from gallery Webxdc tab
+        info: desktop/webxdc-gallery-open-app
+      - id: webxdc-gallery-export
+        label: Export Webxdc app from gallery context menu
+        info: desktop/webxdc-gallery-export
+      - id: webxdc-app-window
+        label: Webxdc app opens in separate sandboxed window
+        info: desktop/webxdc-app-window
+      - id: webxdc-focus-running-instance
+        label: Opening running app focuses existing window
+        info: desktop/webxdc-focus-running-instance
+      - id: webxdc-open-xdc-from-os
+        label: Open .xdc file from OS into chat draft
+        info: desktop/webxdc-open-xdc-from-os
+      - id: webxdc-notification
+        label: Desktop notification on Webxdc app notify event
+        info: desktop/webxdc-notification
+  - id: settings-ux
+    title: Settings & Desktop UX
+    description: Profile, theme, notifications, and shortcuts.
+    items:
+      - id: profile-avatar-edit
+        label: Edit profile name, avatar, and status
+        info: desktop/profile-avatar-edit
+      - id: theme-switch
+        label: Light, dark, system, and custom theme
+        info: desktop/theme-switch
+      - id: desktop-notifications
+        label: Desktop notification on new message
+        info: desktop/desktop-notifications
+      - id: notification-jump-to-message
+        label: Click notification opens correct chat and message
+        info: desktop/notification-jump-to-message
+      - id: keyboard-shortcuts
+        label: Keyboard shortcuts cheat sheet (Ctrl+/)
+        info: desktop/keyboard-shortcuts
+  - id: verification
+    title: Verification
+    description: End-to-end smoke tests on a desktop build.
+    items:
+      - id: two-device-chat
+        label: Two accounts exchange messages on desktop
+        essential: true
+        info: desktop/two-device-chat
+      - id: encrypted-group-chat
+        label: Encrypted group chat works on desktop
+        info: desktop/encrypted-group-chat
+      - id: attachment-roundtrip
+        label: Image attachment roundtrips with correct preview
+        essential: true
+        info: desktop/attachment-roundtrip

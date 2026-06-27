@@ -4,6 +4,7 @@
 	import { copyToClipboard } from "$lib/clipboard";
 	import { page } from "$app/state";
 	import LucideIcon from "$lib/components/LucideIcon.svelte";
+	import BuildingDevelopmentBanner from "$lib/components/BuildingDevelopmentBanner.svelte";
 	import SEO from "$lib/components/SEO.svelte";
 
 	import { browser } from "$app/environment";
@@ -17,6 +18,11 @@
 	let rawMarkdown = $state<string | null>(null);
 	let isMarkdownMode = $derived(
 		browser ? page.url.searchParams.has("markdown") : false,
+	);
+	const isBuildingSection = $derived(
+		data.meta?.category === "Building" ||
+			data.slug === "building" ||
+			data.slug?.startsWith("building/"),
 	);
 
 	// Update content when data changes (from server side or navigation)
@@ -89,6 +95,9 @@
 <SEO title={meta.title || "Docs"} description={meta.description} />
 
 <article class="prose doc-content-article">
+	{#if !isMarkdownMode && isBuildingSection}
+		<BuildingDevelopmentBanner />
+	{/if}
 	{#if isMarkdownMode}
 		{#if rawMarkdown}
 			<div class="markdown-raw-view">

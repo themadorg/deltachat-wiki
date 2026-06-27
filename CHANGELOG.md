@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/themadorg/deltachat-wiki/compare/v1.3.6...v1.4.0) (2026-06-27)
+
+
+### Bug Fixes
+
+* prevent language prefix for language-agnostic routes ([271d575](https://github.com/themadorg/deltachat-wiki/commit/271d5758f42aaa5ae86b2570012d67b8c509ed1d))
+
+
+### Features
+
+* add checklist for building new ([89f0d9b](https://github.com/themadorg/deltachat-wiki/commit/89f0d9b2c676e67c128e2317506bf52a4f51f542))
+
 ## [1.3.6](https://github.com/themadorg/deltachat-wiki/compare/v1.3.5...v1.3.6) (2026-02-12)
 
 

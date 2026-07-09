@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/themadorg/deltachat-wiki/compare/v1.5.0...v1.5.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* use absolute asset paths to stop prod nav MIME crashes ([a973cea](https://github.com/themadorg/deltachat-wiki/commit/a973cea1fa46ac8586b75542e19ca62b81ea2b8b)), closes [themadorg/deltachat-wiki#1](https://github.com/themadorg/deltachat-wiki/issues/1)
+
 # [1.5.0](https://github.com/themadorg/deltachat-wiki/compare/v1.4.0...v1.5.0) (2026-06-27)
 
 

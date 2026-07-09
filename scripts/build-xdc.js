@@ -155,9 +155,10 @@ const rootHtml = `<!doctype html>
 writeFileSync(join(XDC_STAGE, 'index.html'), rootHtml);
 console.log('   ✅ Root index.html redirects to {lang}.html');
 
-// ===== FIX 2: Fix absolute paths in HTML <head> =====
-// SvelteKit already uses relative paths for assets (../../../_app/...)
-// But some refs like href="/favicon.png" are absolute. Fix those.
+// ===== FIX 2: Fix absolute paths in HTML =====
+// With kit.paths.relative=false the web build uses root-absolute URLs
+// (/_app/..., /icon.png). Webxdc has no domain root, so rewrite them to
+// relative paths based on each file's depth in the zip.
 console.log('\n🔧 Fix 2: Fixing absolute paths in HTML files...');
 
 let htmlFixed = 0;
@@ -170,9 +171,17 @@ for (const file of getAllFiles(XDC_STAGE)) {
     // Calculate relative path to root from this file's directory
     const depth = file.split('/').length - 1;
     const toRoot = depth > 0 ? '../'.repeat(depth) : './';
+    const baseRel = toRoot === './' ? '.' : toRoot.replace(/\/$/, '');
 
-    // Fix href="/favicon.png" → href="../../favicon.png"
-    content = content.replace(/href="\/favicon\.png"/g, `href="${toRoot}favicon.png"`);
+    // Root-absolute asset/module paths: "/_app/..." → "../../_app/..."
+    content = content.replace(/(href|src)="\/(?!\/)([^"]+)"/g, `$1="${toRoot}$2"`);
+    content = content.replace(/import\("\/(?!\/)([^"]+)"\)/g, `import("${toRoot}$1")`);
+
+    // kit.paths.relative=false emits base: "" — keep a stable relative base for webxdc
+    content = content.replace(
+        /base:\s*(?:""|'')/g,
+        `base: new URL(${JSON.stringify(baseRel)}, location).pathname.replace(/\\/$/, '')`
+    );
 
     // Fix meta refresh with absolute urls (if any)
     content = content.replace(/content="(\d+);\s*url=\/([^"]+)"/g, (m, t, p) => `content="${t}; url=${toRoot}${p}"`);
@@ -181,6 +190,53 @@ for (const file of getAllFiles(XDC_STAGE)) {
     htmlFixed++;
 }
 console.log(`   ✅ Fixed ${htmlFixed} HTML files`);
+
+// ===== FIX 2b: Patch Vite preload helper absolute URLs in JS =====
+// With base='/', Vite emits only in the preload helper:
+//   function(l){return"/"+l}
+// Do NOT match bare return"/"+x elsewhere (client runtime has those too).
+// Resolve asset paths from the current HTML depth up to the zip root.
+console.log('\n🔧 Fix 2b: Patching absolute JS preload paths for webxdc...');
+let jsFixed = 0;
+// Match the whole one-line helper body only (param used solely for "/" + param).
+const preloadAbsRe =
+    /function\(([A-Za-z_$][\w$]*)\)\{return"\/"\+\1\}/g;
+const preloadAbsReplacement =
+    'function($1){return new URL("../".repeat(location.pathname.replace(/\\/[^/]*$/,"").split("/").filter(Boolean).length)+$1,location.href).href}';
+for (const file of getAllFiles(XDC_STAGE)) {
+    if (!file.endsWith('.js')) continue;
+    const filePath = join(XDC_STAGE, file);
+    let content = readFileSync(filePath, 'utf-8');
+    if (!preloadAbsRe.test(content)) continue;
+    preloadAbsRe.lastIndex = 0;
+    const next = content.replace(preloadAbsRe, preloadAbsReplacement);
+    if (next !== content) {
+        writeFileSync(filePath, next);
+        jsFixed++;
+    }
+}
+console.log(`   ✅ Patched preload helper in ${jsFixed} JS files`);
+
+// ===== FIX 2c: Alias __data.json for .html URLs =====
+// trailingSlash='never' builds pretty paths as page.html + page/__data.json.
+// Webxdc opens the literal page.html URL; SvelteKit then requests
+// page.html__data.json (not page/__data.json). Missing data files 404 and can
+// trip reload loops during hydration. Copy aliases so both layouts work.
+console.log('\n🔧 Fix 2c: Aliasing __data.json for .html entrypoints...');
+let dataAliased = 0;
+for (const file of getAllFiles(XDC_STAGE)) {
+    if (!file.endsWith('.html') || file === 'index.html') continue;
+    const dirData = file.replace(/\.html$/, '/__data.json');
+    const htmlData = file.replace(/\.html$/, '.html__data.json');
+    const src = join(XDC_STAGE, dirData);
+    const dst = join(XDC_STAGE, htmlData);
+    if (existsSync(src) && !existsSync(dst)) {
+        mkdirSync(dirname(dst), { recursive: true });
+        copyFileSync(src, dst);
+        dataAliased++;
+    }
+}
+console.log(`   ✅ Aliased ${dataAliased} __data.json files as *.html__data.json`);
 
 // ===== FIX 3: Wrap localStorage in try/catch =====
 // The theme detection script in <head> uses localStorage which may throw in webxdc
@@ -206,10 +262,19 @@ for (const file of getAllFiles(XDC_STAGE)) {
 }
 console.log(`   ✅ Fixed localStorage in ${lsFixed} files`);
 
-// ===== FIX 4: Inject webxdc flag =====
+// ===== FIX 4: Inject webxdc flag + strip .html for the router =====
 // Sets window.__WEBXDC__ = true so the app knows it's running inside webxdc.
-// This enables external link interception (see src/lib/webxdc.svelte.ts).
-console.log('\n🔧 Fix 4: Injecting webxdc detection flag...');
+// Also normalizes .../page.html → .../page via history.replaceState before
+// SvelteKit boots, so the client router matches prerendered routes (it never
+// sees the .html suffix that static zip entrypoints need on disk).
+console.log('\n🔧 Fix 4: Injecting webxdc detection flag + .html path normalizer...');
+
+const webxdcBootScript =
+    '<script>window.__WEBXDC__=true;' +
+    '(function(){var p=location.pathname;if(/\\.html$/i.test(p)){' +
+    'var c=p.replace(/\\.html$/i,"");if(c.endsWith("/index"))c=c.slice(0,-6)||"/";' +
+    'history.replaceState(history.state,"",c+location.search+location.hash);' +
+    '}})();</script>';
 
 let flagInjected = 0;
 for (const file of getAllFiles(XDC_STAGE)) {
@@ -220,12 +285,12 @@ for (const file of getAllFiles(XDC_STAGE)) {
 
     // Inject right after <head> or as first script
     if (content.includes('<head>') && !content.includes('__WEBXDC__')) {
-        content = content.replace('<head>', '<head><script>window.__WEBXDC__=true</script>');
+        content = content.replace('<head>', `<head>${webxdcBootScript}`);
         writeFileSync(filePath, content);
         flagInjected++;
     }
 }
-console.log(`   ✅ Injected __WEBXDC__ flag in ${flagInjected} HTML files`);
+console.log(`   ✅ Injected webxdc boot script in ${flagInjected} HTML files`);
 
 // ===== CREATE ZIP =====
 console.log('\n📦 Creating .xdc file...');

@@ -19,6 +19,13 @@ const config = {
 	],
 
 	kit: {
+		// Root-absolute asset URLs (e.g. /_app/...) so client navigations never
+		// resolve modules relative to the current page path. Relative paths plus
+		// Cloudflare Pages' HTML fallback for missing .js files cascade into
+		// nested /.../_app/immutable/.../_app/... URLs and MIME-type crashes.
+		paths: {
+			relative: false
+		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
